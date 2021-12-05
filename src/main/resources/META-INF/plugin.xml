@@ -1,0 +1,20 @@
+<idea-plugin>
+    <id>org.redbyte.uiRenderingPlugin</id>
+    <name>Rendering Ui </name>
+    <vendor email="developer.sokolov@gmail.com" url="https://github.com/i-redbyte">RedByte</vendor>
+
+    <description>RedByte's first rendering ui test plugin</description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="RedByte Notification" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <action id="HelloWord" class="HelloWord" text="HelloWord" description="Show hello word">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt U"/>
+        </action>
+    </actions>
+</idea-plugin>
