@@ -1,20 +1,18 @@
 <idea-plugin>
-    <id>org.redbyte.uiRenderingPlugin</id>
-    <name>Rendering Ui </name>
-    <vendor email="developer.sokolov@gmail.com" url="https://github.com/i-redbyte">RedByte</vendor>
-
-    <description>RedByte's first rendering ui test plugin</description>
-
-    <depends>com.intellij.modules.platform</depends>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <notificationGroup id="RedByte Notification" displayType="BALLOON"/>
-    </extensions>
+    <id>ru.redbyte.arch</id>
+    <name>MVI Feature Creator</name>
+    <vendor>Red_byte</vendor>
+    <description>Plugin for creating a module of a new MVI/ELM feature in the application</description>
+    <depends>com.intellij.modules.androidstudio</depends>
+    <depends>org.jetbrains.android</depends>
 
     <actions>
-        <action id="HelloWord" class="HelloWord" text="HelloWord" description="Show hello word">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift meta alt U"/>
-        </action>
+        <group>
+            <add-to-group group-id="NewGroup" anchor="last"/>
+            <separator/>
+            <action id="ru.redbyte.arch.plugin.NewFeatureAction"
+                    class="ru.redbyte.arch.plugin.NewFeatureAction"
+                    text="Feature"/>
+        </group>
     </actions>
 </idea-plugin>
