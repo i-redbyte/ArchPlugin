@@ -1,6 +1,8 @@
 package ru.redbyte.arch.plugin.data
 
 import com.intellij.psi.PsiDirectory
+import ru.redbyte.arch.plugin.data.tmps.ManifestParams
+import ru.redbyte.arch.plugin.data.tmps.ManifestTemplate
 import ru.redbyte.arch.plugin.domain.Feature
 
 class MakeModule(private val feature: Feature) : Module() {
@@ -17,6 +19,9 @@ class MakeModule(private val feature: Feature) : Module() {
 
     override fun createModuleStructure(directory: PsiDirectory) {
         super.createModuleStructure(directory)
-        // TODO: 15.08.2023 release create module
+        mainDirectory?.addFile(
+            "AndroidManifest.xml",
+            ManifestTemplate().generate(ManifestParams(names.lowerCaseModuleName))
+        )
     }
 }

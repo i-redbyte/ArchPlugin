@@ -20,7 +20,7 @@ class FeatureCreator(private val project: Project) {
 
     fun createModules(feature: Feature) {
         ApplicationManager.getApplication().runWriteAction{
-            with(featuresRoot.createSubdirectory(feature.featureName)) {
+            with(featuresRoot) {
                 MakeModule(feature).createModuleStructure(this)
             }
         }
