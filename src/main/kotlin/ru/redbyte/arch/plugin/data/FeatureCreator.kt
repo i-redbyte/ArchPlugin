@@ -20,8 +20,8 @@ class FeatureCreator(private val project: Project) {
 
     fun createModules(feature: Feature) {
         ApplicationManager.getApplication().runWriteAction{
-            with(featuresRoot.createSubdirectory(feature.featureName)) {
-                // TODO: 10.08.2023 release it
+            with(featuresRoot) {
+                MakeModule(feature).createModuleStructure(this)
             }
         }
     }
