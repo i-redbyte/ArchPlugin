@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.tmps
+package ru.redbyte.arch.plugin.data.tmp
 
 interface Template<T : TemplateParams> {
 
