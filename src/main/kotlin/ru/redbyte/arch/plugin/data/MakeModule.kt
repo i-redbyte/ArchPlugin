@@ -1,8 +1,10 @@
 package ru.redbyte.arch.plugin.data
 
 import com.intellij.psi.PsiDirectory
-import ru.redbyte.arch.plugin.data.tmps.ManifestParams
-import ru.redbyte.arch.plugin.data.tmps.ManifestTemplate
+import ru.redbyte.arch.plugin.data.tmp.BuildGradleParams
+import ru.redbyte.arch.plugin.data.tmp.BuildGradleTemplate
+import ru.redbyte.arch.plugin.data.tmp.ManifestParams
+import ru.redbyte.arch.plugin.data.tmp.ManifestTemplate
 import ru.redbyte.arch.plugin.domain.Feature
 
 class MakeModule(private val feature: Feature) : Module() {
@@ -19,6 +21,18 @@ class MakeModule(private val feature: Feature) : Module() {
 
     override fun createModuleStructure(directory: PsiDirectory) {
         super.createModuleStructure(directory)
+        makeAndroidManifest()
+        makeBuildGradle()
+    }
+
+    private fun makeBuildGradle() {
+        rootDirectory?.addFile(
+            "build.gradle",
+            BuildGradleTemplate().generate(BuildGradleParams(feature))
+        )
+    }
+
+    private fun makeAndroidManifest() {
         mainDirectory?.addFile(
             "AndroidManifest.xml",
             ManifestTemplate().generate(ManifestParams(names.lowerCaseModuleName))
