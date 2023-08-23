@@ -15,7 +15,7 @@ fun String.camelToSnakeCase() =
     camelRegex
         .replace(this) {
             "_${it.value}"
-        }
+        }.replace("-","_")
         .toLowerCase()
 
 class NamesBuilder {
