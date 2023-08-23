@@ -20,14 +20,18 @@ class MakeModule(private val feature: Feature) : Module() {
         super.createModuleStructure(directory)
         makeAndroidManifest()
         makeBuildGradle()
+        makeFragmentLayout()
+    }
+
+    private fun makeFragmentLayout() {
         mainDirectory
             ?.createSubdirectory("res")
             ?.createSubdirectory("layout")
             ?.apply {
                 //todo: add check is need create fragment
                 addFile(
-                    "t_${names.snakeCaseName}_container_fragment.xml",
-                    ContainerLayoutTemplate().generate(NoParams)
+                    "t_${names.snakeCaseName}_fragment.xml",
+                    FragmentLayoutTemplate().generate(NoParams)
                 )
             }
     }
