@@ -1,6 +1,6 @@
 package ru.redbyte.arch.plugin.data.tmp
 
-class ContainerLayoutTemplate : Template<NoParams> {
+class FragmentLayoutTemplate : Template<NoParams> {
     override fun generate(params: NoParams): String {
         return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                 "<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
