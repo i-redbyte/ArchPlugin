@@ -1,10 +1,7 @@
 package ru.redbyte.arch.plugin.data
 
 import com.intellij.psi.PsiDirectory
-import ru.redbyte.arch.plugin.data.tmp.BuildGradleParams
-import ru.redbyte.arch.plugin.data.tmp.BuildGradleTemplate
-import ru.redbyte.arch.plugin.data.tmp.ManifestParams
-import ru.redbyte.arch.plugin.data.tmp.ManifestTemplate
+import ru.redbyte.arch.plugin.data.tmp.*
 import ru.redbyte.arch.plugin.domain.Feature
 
 class MakeModule(private val feature: Feature) : Module() {
@@ -23,6 +20,16 @@ class MakeModule(private val feature: Feature) : Module() {
         super.createModuleStructure(directory)
         makeAndroidManifest()
         makeBuildGradle()
+        mainDirectory
+            ?.createSubdirectory("res")
+            ?.createSubdirectory("layout")
+            ?.apply {
+                //todo: add check is need create fragment
+                addFile(
+                    "t_${names.snakeCaseName}_container_fragment.xml",
+                    ContainerLayoutTemplate().generate(NoParams)
+                )
+            }
     }
 
     private fun makeBuildGradle() {
