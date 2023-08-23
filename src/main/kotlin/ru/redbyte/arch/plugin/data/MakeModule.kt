@@ -21,6 +21,31 @@ class MakeModule(private val feature: Feature) : Module() {
         makeAndroidManifest()
         makeBuildGradle()
         makeFragmentLayout()
+        makePresentationPackage()
+    }
+
+    private fun makePresentationPackage() {
+        makeUIPackage()
+    }
+
+    private fun makeUIPackage() {
+        javaDirectory
+            ?.createSubdirectory("presentation")
+            ?.createSubdirectory("ui")
+            ?.apply {
+            addFile(
+                "${names.camelCaseName}Fragment.kt",
+                FragmentTemplate().generate(
+                    FragmentParams(
+                        names.lowerCaseModuleName,
+                        names.camelCaseName,
+                        names.snakeCaseName,
+                        false,
+                        true
+                    )
+                )
+            )
+        }
     }
 
     private fun makeFragmentLayout() {
