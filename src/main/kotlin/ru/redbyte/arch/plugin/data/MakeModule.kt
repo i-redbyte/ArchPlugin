@@ -52,6 +52,15 @@ class MakeModule(private val feature: Feature) : Module() {
                         )
                     )
                 )
+                addFile(
+                    "${names.camelCaseName}Reducer.kt",
+                    ReducerTemplate().generate(
+                        ReducerParams(
+                            names.lowerCaseModuleName,
+                            names.camelCaseName
+                        )
+                    )
+                )
             }
     }
 
