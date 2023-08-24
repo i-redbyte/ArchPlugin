@@ -43,6 +43,15 @@ class MakeModule(private val feature: Feature) : Module() {
                         )
                     )
                 )
+                addFile(
+                    "${names.camelCaseName}State.kt",
+                    StateTemplate().generate(
+                        StateParams(
+                            names.lowerCaseModuleName,
+                            names.camelCaseName
+                        )
+                    )
+                )
             }
     }
 
@@ -51,19 +60,19 @@ class MakeModule(private val feature: Feature) : Module() {
             ?.createSubdirectory("presentation")
             ?.createSubdirectory("ui")
             ?.apply {
-            addFile(
-                "${names.camelCaseName}Fragment.kt",
-                FragmentTemplate().generate(
-                    FragmentParams(
-                        names.lowerCaseModuleName,
-                        names.camelCaseName,
-                        names.snakeCaseName,
-                        false,
-                        true
+                addFile(
+                    "${names.camelCaseName}Fragment.kt",
+                    FragmentTemplate().generate(
+                        FragmentParams(
+                            names.lowerCaseModuleName,
+                            names.camelCaseName,
+                            names.snakeCaseName,
+                            false,
+                            true
+                        )
                     )
                 )
-            )
-        }
+            }
     }
 
     private fun makeFragmentLayout() {
