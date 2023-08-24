@@ -54,3 +54,13 @@ class EventParams(
     val lowerCaseFeatureName: String,
     val camelCaseFeatureName: String
 ) : TemplateParams
+
+class StateParams(
+    val lowerCaseFeatureName: String,
+    val camelCaseFeatureName: String
+) : TemplateParams
+
+class ReducerParams(
+    val lowerCaseFeatureName: String,
+    val camelCaseFeatureName: String
+) : TemplateParams
