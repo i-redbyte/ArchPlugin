@@ -21,7 +21,7 @@ class FragmentTemplate : Template<FragmentParams> {
             }
         }
 
-        return "$PACKAGE $PACKAGE_PREFIX.${params.lowerCaseFeatureName}.presentation\n\n" +
+        return "$PACKAGE $PACKAGE_PREFIX.${params.lowerCaseFeatureName}.presentation.ui\n\n" +
                 importList.sortedImports().joinToString("\n") +
                 "\n\n" +
                 "$INTERNAL $CLASS ${params.camelCaseFeatureName}Fragment : Fragment(R.layout.t_${params.snakeCaseFeatureName}_fragment) {\n" +

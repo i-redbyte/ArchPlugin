@@ -26,6 +26,24 @@ class MakeModule(private val feature: Feature) : Module() {
 
     private fun makePresentationPackage() {
         makeUIPackage()
+        makeReducerPackage()
+    }
+
+    private fun makeReducerPackage() {
+        javaDirectory
+            ?.findSubdirectory("presentation")
+            ?.createSubdirectory("reducer")
+            ?.apply {
+                addFile(
+                    "${names.camelCaseName}Event.kt",
+                    EventTemplate().generate(
+                        EventParams(
+                            names.lowerCaseModuleName,
+                            names.camelCaseName
+                        )
+                    )
+                )
+            }
     }
 
     private fun makeUIPackage() {

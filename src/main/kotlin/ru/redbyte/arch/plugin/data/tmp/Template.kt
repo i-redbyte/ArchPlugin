@@ -49,3 +49,8 @@ class FragmentParams(
     val createDi: Boolean,
     val withSetupBackNavigation: Boolean //TODO: extract to setup window
 ) : TemplateParams
+
+class EventParams(
+    val lowerCaseFeatureName: String,
+    val camelCaseFeatureName: String
+) : TemplateParams
