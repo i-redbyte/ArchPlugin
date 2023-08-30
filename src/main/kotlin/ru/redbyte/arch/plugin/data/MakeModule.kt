@@ -25,8 +25,10 @@ class MakeModule(private val feature: Feature) : Module() {
     }
 
     private fun makePresentationPackage() {
+        javaDirectory?.createSubdirectory("presentation")
         makeUIPackage()
         makeReducerPackage()
+
     }
 
     private fun makeReducerPackage() {
@@ -66,7 +68,7 @@ class MakeModule(private val feature: Feature) : Module() {
 
     private fun makeUIPackage() {
         javaDirectory
-            ?.createSubdirectory("presentation")
+            ?.findSubdirectory("presentation")
             ?.createSubdirectory("ui")
             ?.apply {
                 addFile(

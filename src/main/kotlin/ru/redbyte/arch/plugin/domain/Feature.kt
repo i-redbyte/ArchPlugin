@@ -8,5 +8,5 @@ class BaseFeature(featureName: String) : Feature(featureName)
 
 class FragmentFeature(
     featureName: String,
-    val createContainer: Boolean
+    val createContainer: Boolean //TODO: decide whether it is necessary?
 ) : Feature(featureName)
