@@ -30,7 +30,7 @@ class BuildGradleTemplate : Template<BuildGradleParams> {
         return append("android {")
             .addNewLine()
             .append(params.gradleIndent)
-            .append("resourcePrefix 't_${params.feature.featureName.camelToSnakeCase()}_'")
+            .append("resourcePrefix 't_${params.feature.params.featureName.camelToSnakeCase()}_'")
             .addNewLine()
             .append("}")
     }
