@@ -9,6 +9,7 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.FeatureCreator
+import ru.redbyte.arch.plugin.data.FeatureParams
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.Box
@@ -60,7 +61,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         val featureNameHint = JLabel("Feature name")
         val featureNameDescription = JLabel("Example: super-puper")
 
-         featureNameHint.alignmentX = Component.LEFT_ALIGNMENT
+        featureNameHint.alignmentX = Component.LEFT_ALIGNMENT
         featureNameDescription.alignmentX = Component.LEFT_ALIGNMENT
         featureNameField.alignmentX = Component.LEFT_ALIGNMENT
         createDiCheckBox.alignmentX = Component.LEFT_ALIGNMENT
@@ -88,8 +89,11 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     override fun doOKAction() {
         featurePresenter.createFeature(
-            featureNameField.text,
-            createFragment.isSelected
+            FeatureParams(
+                featureNameField.text,
+                createDiCheckBox.isSelected,
+                createFragment.isSelected
+            )
         )
     }
 

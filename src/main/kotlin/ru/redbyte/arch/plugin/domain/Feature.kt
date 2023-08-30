@@ -1,12 +1,11 @@
 package ru.redbyte.arch.plugin.domain
 
+import ru.redbyte.arch.plugin.data.FeatureParams
+
 sealed class Feature(
-    val featureName: String
+    val params: FeatureParams
 )
 
-class BaseFeature(featureName: String) : Feature(featureName)
+class BaseFeature(params: FeatureParams) : Feature(params)
 
-class FragmentFeature(
-    featureName: String,
-    val createContainer: Boolean //TODO: decide whether it is necessary?
-) : Feature(featureName)
+class FragmentFeature(params: FeatureParams) : Feature(params)

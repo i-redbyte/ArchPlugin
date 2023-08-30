@@ -2,6 +2,7 @@ package ru.redbyte.arch.plugin.presentation
 
 import com.intellij.openapi.ui.ValidationInfo
 import ru.redbyte.arch.plugin.data.FeatureCreator
+import ru.redbyte.arch.plugin.data.FeatureParams
 import ru.redbyte.arch.plugin.domain.BaseFeature
 import ru.redbyte.arch.plugin.domain.FragmentFeature
 
@@ -10,7 +11,7 @@ interface FeaturePresenter {
 
     fun getTypeArray(): Array<String>
 
-    fun createFeature(name: String, createFragment: Boolean) // TODO: 10.08.2023 add di state
+    fun createFeature(params: FeatureParams)
 
     fun validate(name: String): ValidationInfo?
 
@@ -28,11 +29,11 @@ class FeaturePresenterImpl(
         return Type.values().map { it.text }.toTypedArray()
     }
 
-    override fun createFeature(name: String, createFragment: Boolean) {
+    override fun createFeature(params: FeatureParams) {
         try {
             val feature = when (type) {
-                Type.BaseFeature -> BaseFeature(name)
-                Type.FragmentFeature -> FragmentFeature(name, createFragment)
+                Type.BaseFeature -> BaseFeature(params)
+                Type.FragmentFeature -> FragmentFeature(params)
             }
 
             featureCreator.createModules(feature)

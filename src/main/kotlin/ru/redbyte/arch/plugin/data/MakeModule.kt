@@ -6,7 +6,7 @@ import ru.redbyte.arch.plugin.domain.Feature
 
 class MakeModule(private val feature: Feature) : Module() {
 
-    private val names = NamesBuilder().build(feature.featureName)
+    private val names = NamesBuilder().build(feature.params.featureName)
 
     override fun PsiDirectory.createJavaDirectory(): PsiDirectory {
         return createSubdirectory(names.lowerCaseModuleName)
@@ -18,15 +18,23 @@ class MakeModule(private val feature: Feature) : Module() {
 
     override fun createModuleStructure(directory: PsiDirectory) {
         super.createModuleStructure(directory)
-        makeAndroidManifest()
-        makeBuildGradle()
-        makeFragmentLayout()
-        makePresentationPackage()
+        with(feature.params) {
+            makeAndroidManifest()
+            makeBuildGradle()
+            makeFragmentLayout(withFragmentFiles)
+            makePresentationPackage(withFragmentFiles)
+            makeDIPackage(withDIFiles)
+        }
     }
 
-    private fun makePresentationPackage() {
+    private fun makeDIPackage(withDIFiles: Boolean) {
+        if (!withDIFiles) return
+        javaDirectory?.createSubdirectory("di")
+    }
+
+    private fun makePresentationPackage(withFragmentFiles: Boolean) {
         javaDirectory?.createSubdirectory("presentation")
-        makeUIPackage()
+        if (withFragmentFiles) makeUIPackage()
         makeReducerPackage()
 
     }
@@ -78,15 +86,16 @@ class MakeModule(private val feature: Feature) : Module() {
                             names.lowerCaseModuleName,
                             names.camelCaseName,
                             names.snakeCaseName,
-                            false,
-                            true
+                            false,      // TODO: get with params
+                            true // TODO: Add to params
                         )
                     )
                 )
             }
     }
 
-    private fun makeFragmentLayout() {
+    private fun makeFragmentLayout(withFragmentFiles: Boolean) {
+        if (!withFragmentFiles) return
         mainDirectory
             ?.createSubdirectory("res")
             ?.createSubdirectory("layout")
