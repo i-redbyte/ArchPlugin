@@ -8,19 +8,11 @@ import com.intellij.psi.PsiManager
 import ru.redbyte.arch.plugin.domain.Feature
 import java.io.File
 
-class FeatureCreator(private val project: Project) {
+class FeatureCreator(val project: Project) {
 
-    private val featuresRoot: PsiDirectory = requireNotNull(
-        LocalFileSystem.getInstance().findFileByIoFile(
-            File("${project.basePath}/features")
-        )?.let {
-            PsiManager.getInstance(project).findDirectory(it)
-        }
-    )
-
-    fun createModules(feature: Feature) {
-        ApplicationManager.getApplication().runWriteAction{
-            with(featuresRoot) {
+    fun createModules(feature: Feature, targetDirectory: PsiDirectory) {
+        ApplicationManager.getApplication().runWriteAction {
+            with(targetDirectory) {
                 MakeModule(feature).createModuleStructure(this)
             }
         }

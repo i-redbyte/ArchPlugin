@@ -7,6 +7,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.FeatureCreator
 import ru.redbyte.arch.plugin.data.FeatureParams
@@ -46,6 +48,10 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
     private val createFragment = JCheckBox("Create fragment").apply {
         isSelected = true
     }
+
+    // Новый ComboBox для выбора директории
+    private val directoriesComboBox = ComboBox(getTopLevelDirectories().toTypedArray())
+
     private val typeList = ComboBox(featurePresenter.getTypeArray())
 
     init {
@@ -60,6 +66,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.layout = layout
         val featureNameHint = JLabel("Feature name")
         val featureNameDescription = JLabel("Example: super-puper")
+        val directoryHint = JLabel("Select directory")
 
         featureNameHint.alignmentX = Component.LEFT_ALIGNMENT
         featureNameDescription.alignmentX = Component.LEFT_ALIGNMENT
@@ -67,11 +74,16 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         createDiCheckBox.alignmentX = Component.LEFT_ALIGNMENT
         createFragment.alignmentX = Component.LEFT_ALIGNMENT
         typeList.alignmentX = Component.LEFT_ALIGNMENT
+        directoriesComboBox.alignmentX = Component.LEFT_ALIGNMENT
+        directoryHint.alignmentX = Component.LEFT_ALIGNMENT
+
+        dialogPanel.add(directoryHint)
+        dialogPanel.add(directoriesComboBox)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         dialogPanel.add(featureNameHint)
         dialogPanel.add(featureNameField)
         dialogPanel.add(featureNameDescription)
-        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         dialogPanel.add(typeList)
@@ -88,11 +100,13 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
     }
 
     override fun doOKAction() {
+        val selectedDirectory = directoriesComboBox.selectedItem as String
         featurePresenter.createFeature(
             FeatureParams(
                 featureNameField.text,
                 createDiCheckBox.isSelected,
-                createFragment.isSelected
+                createFragment.isSelected,
+                selectedDirectory // Передаем выбранную директорию
             )
         )
     }
@@ -113,5 +127,28 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
     override fun enableCheckBoxes(enable: Boolean) {
         createDiCheckBox.isEnabled = enable
         createFragment.isEnabled = enable
+    }
+
+    private fun getTopLevelDirectories(): List<String> {
+        val projectBaseDir = LocalFileSystem
+            .getInstance()
+            .findFileByPath(
+                project.basePath ?: return emptyList()
+            )
+        val psiProjectBaseDir = projectBaseDir
+            ?.let {
+                PsiManager
+                    .getInstance(project)
+                    .findDirectory(it)
+            } ?: return emptyList()
+
+        return psiProjectBaseDir.subdirectories
+            .filter { dir -> !isSystemDirectory(dir.name) }
+            .map { it.name }
+    }
+
+    private fun isSystemDirectory(name: String): Boolean {
+        val systemDirs = listOf(".idea", "build", "gradle", "out")
+        return name in systemDirs || name.startsWith(".")
     }
 }

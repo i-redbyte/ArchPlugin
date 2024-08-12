@@ -1,6 +1,9 @@
 package ru.redbyte.arch.plugin.presentation
 
 import com.intellij.openapi.ui.ValidationInfo
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiManager
 import ru.redbyte.arch.plugin.data.FeatureCreator
 import ru.redbyte.arch.plugin.data.FeatureParams
 import ru.redbyte.arch.plugin.domain.BaseFeature
@@ -36,8 +39,13 @@ class FeaturePresenterImpl(
                 Type.FragmentFeature -> FragmentFeature(params)
             }
 
-            featureCreator.createModules(feature)
-            featureView.closeSuccessfully()
+            val targetDirectory = findTargetDirectory(params.selectedDirectory)
+            if (targetDirectory != null) {
+                featureCreator.createModules(feature, targetDirectory)
+                featureView.closeSuccessfully()
+            } else {
+                featureView.closeWithError("Target directory not found.")
+            }
         } catch (e: Exception) {
             featureView.closeWithError("Error occurred: ${e.message}")
         }
@@ -57,6 +65,22 @@ class FeaturePresenterImpl(
             this.type = it
             featureView.enableCheckBoxes(it == Type.FragmentFeature)
         }
+    }
+
+    private fun findTargetDirectory(directoryName: String): PsiDirectory? {
+        val projectBaseDir = LocalFileSystem
+            .getInstance()
+            .findFileByPath(
+                featureCreator.project.basePath ?: return null
+            )
+        val psiProjectBaseDir = projectBaseDir
+            ?.let {
+                PsiManager
+                    .getInstance(featureCreator.project)
+                    .findDirectory(it)
+            } ?: return null
+
+        return psiProjectBaseDir.subdirectories.find { it.name == directoryName }
     }
 }
 
