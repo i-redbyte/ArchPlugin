@@ -5,7 +5,9 @@
     <description>Plugin for creating a module of a new MVI/ELM feature in the application</description>
     <depends>com.intellij.modules.androidstudio</depends>
     <depends>org.jetbrains.android</depends>
-
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="ru.redbyte.arch.notifications" displayType="BALLOON" logByDefault="true"/>
+    </extensions>
     <actions>
         <group>
             <add-to-group group-id="NewGroup" anchor="last"/>

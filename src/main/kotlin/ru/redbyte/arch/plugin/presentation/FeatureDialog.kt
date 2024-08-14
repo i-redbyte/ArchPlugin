@@ -1,13 +1,12 @@
 package ru.redbyte.arch.plugin.presentation
 
-import com.intellij.notification.NotificationDisplayType
-import com.intellij.notification.NotificationGroup
-import com.intellij.notification.NotificationType
+import com.intellij.notification.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.FeatureCreator
@@ -49,7 +48,6 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         isSelected = true
     }
 
-    // Новый ComboBox для выбора директории
     private val directoriesComboBox = ComboBox(getTopLevelDirectories().toTypedArray())
 
     private val typeList = ComboBox(featurePresenter.getTypeArray())
@@ -106,8 +104,9 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
                 featureNameField.text,
                 createDiCheckBox.isSelected,
                 createFragment.isSelected,
-                selectedDirectory // Передаем выбранную директорию
-            )
+                selectedDirectory
+            ),
+            getPackageName()
         )
     }
 
@@ -145,6 +144,55 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         return psiProjectBaseDir.subdirectories
             .filter { dir -> !isSystemDirectory(dir.name) }
             .map { it.name }
+    }
+
+    private fun getPackageName(): String {
+        val projectBaseDir = LocalFileSystem
+            .getInstance()
+            .findFileByPath(
+                project.basePath ?: return ""
+            )
+
+        val psiProjectBaseDir = projectBaseDir
+            ?.let {
+                PsiManager
+                    .getInstance(project)
+                    .findDirectory(it)
+            } ?: return ""
+
+        val srcMainJavaDir = psiProjectBaseDir.subdirectories
+            .firstOrNull { dir -> dir.name == "src" }
+            ?.subdirectories
+            ?.firstOrNull { dir -> dir.name == "main" }
+            ?.subdirectories
+            ?.firstOrNull { dir -> dir.name == "java" }
+            ?: throw IllegalArgumentException("[FeatureDialog] srcMainJavaDir is null")
+        showNotification(project, "getPackageName", srcMainJavaDir.toString())
+        return getPackageNameFromDir(srcMainJavaDir)
+    }
+
+    private fun getPackageNameFromDir(dir: PsiDirectory): String {
+        val packageNames = mutableListOf<String>()
+
+        var currentDir: PsiDirectory? = dir
+        while (currentDir != null && currentDir.name != "java") {
+            packageNames.add(currentDir.name)
+            currentDir = currentDir.parent
+        }
+
+        val joinToString = packageNames.reversed().joinToString(".")
+        showNotification(project, "getPackageNameFromDir", joinToString)
+        return joinToString
+    }
+
+    fun showNotification(project: Project, title: String, content: String) {
+        val notificationGroup = NotificationGroup.findRegisteredGroup("ru.redbyte.arch.notifications")
+            ?: NotificationGroup("ru.redbyte.arch.notifications", NotificationDisplayType.BALLOON, true)
+
+        val notification = notificationGroup.createNotification(
+            content, NotificationType.INFORMATION
+        )
+        Notifications.Bus.notify(notification, project)
     }
 
     private fun isSystemDirectory(name: String): Boolean {

@@ -16,8 +16,8 @@ class MakeModule(private val feature: Feature) : Module() {
         return createSubdirectory(names.moduleName)
     }
 
-    override fun createModuleStructure(directory: PsiDirectory) {
-        super.createModuleStructure(directory)
+    override fun createModuleStructure(directory: PsiDirectory, packageName: String) {
+        super.createModuleStructure(directory, packageName)
         with(feature.params) {
             makeAndroidManifest()
             makeBuildGradle()
