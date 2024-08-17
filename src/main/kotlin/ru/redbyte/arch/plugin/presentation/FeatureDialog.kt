@@ -6,13 +6,15 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
-import com.intellij.psi.PsiDirectory
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.FeatureCreator
 import ru.redbyte.arch.plugin.data.FeatureParams
+import ru.redbyte.arch.plugin.showMessage
 import java.awt.Component
 import java.awt.Dimension
+import java.io.File
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JCheckBox
@@ -106,7 +108,8 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
                 createFragment.isSelected,
                 selectedDirectory
             ),
-            getPackageName()
+            getTopLevelPackageName(project)
+            //getPackageName(project)
         )
     }
 
@@ -128,6 +131,80 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         createFragment.isEnabled = enable
     }
 
+
+    fun getPackageName(project: Project): String {
+        val projectBasePath = project.basePath
+            ?: throw IllegalArgumentException("[getPackageName] project.basePath is null")
+
+        val projectBaseDir = LocalFileSystem.getInstance().findFileByPath(projectBasePath)
+            ?: throw IllegalStateException("[getPackageName] Unable to find project base directory at $projectBasePath")
+
+        val buildFilePaths = listOf(
+            "${projectBaseDir.path}/app/build.gradle.kts",
+            "${projectBaseDir.path}/app/build.gradle"
+        )
+
+        val buildFile = buildFilePaths.map(::File).firstOrNull { it.exists() }
+            ?: throw IllegalStateException("[getPackageName] No build.gradle or build.gradle.kts found in the project")
+
+        val buildFileContent = buildFile.readText()
+
+        val namespaceRegex = Regex("""namespace\s*=\s*["'](.+?)["']""")
+        val matchResult = namespaceRegex.find(buildFileContent)
+
+        return matchResult?.groups?.get(1)?.value
+            ?: throw IllegalStateException("[getPackageName] Namespace not found in ${buildFile.name}")
+    }
+    fun getTopLevelPackageName(project: Project): String {
+        // Получение базовой директории проекта
+        val projectBasePath = project.basePath
+            ?: throw IllegalArgumentException("[getTopLevelPackageName] project.basePath is null")
+
+        val projectBaseDir = LocalFileSystem.getInstance().findFileByPath(projectBasePath)
+            ?: throw IllegalStateException("[getTopLevelPackageName] Unable to find project base directory at $projectBasePath")
+
+        // Пути к исходным кодам Java и Kotlin
+        val sourceDirectories = listOf(
+            "${projectBaseDir.path}/app/src/main/java",
+            "${projectBaseDir.path}/app/src/main/kotlin"
+        )
+
+        // Поиск первого файла с кодом в указанных директориях
+        val packageName = sourceDirectories.asSequence()
+            .map(::File)
+            .filter { it.exists() }
+            .mapNotNull { findTopLevelPackageName(it) }
+            .firstOrNull()
+
+        return packageName ?: throw IllegalStateException("[getTopLevelPackageName] No package name found in source directories")
+    }
+
+    // Рекурсивный поиск верхнеуровневого имени пакета
+    fun findTopLevelPackageName(directory: File): String? {
+        directory.walkTopDown().forEach { file ->
+            if (file.isFile && (file.extension == "java" || file.extension == "kt")) {
+                val packageName = extractPackageNameFromFile(file)
+                if (packageName != null) {
+                    return packageName
+                }
+            }
+        }
+        return null
+    }
+
+    fun extractPackageNameFromFile(file: File): String? {
+        val packageRegex = Regex("""^\s*package\s+([\w.]+)""")
+        file.useLines { lines ->
+            for (line in lines) {
+                val matchResult = packageRegex.find(line)
+                if (matchResult != null) {
+                    return matchResult.groups[1]?.value
+                }
+            }
+        }
+        return null
+    }
+
     private fun getTopLevelDirectories(): List<String> {
         val projectBaseDir = LocalFileSystem
             .getInstance()
@@ -144,55 +221,6 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         return psiProjectBaseDir.subdirectories
             .filter { dir -> !isSystemDirectory(dir.name) }
             .map { it.name }
-    }
-
-    private fun getPackageName(): String {
-        val projectBaseDir = LocalFileSystem
-            .getInstance()
-            .findFileByPath(
-                project.basePath ?: return ""
-            )
-
-        val psiProjectBaseDir = projectBaseDir
-            ?.let {
-                PsiManager
-                    .getInstance(project)
-                    .findDirectory(it)
-            } ?: return ""
-
-        val srcMainJavaDir = psiProjectBaseDir.subdirectories
-            .firstOrNull { dir -> dir.name == "src" }
-            ?.subdirectories
-            ?.firstOrNull { dir -> dir.name == "main" }
-            ?.subdirectories
-            ?.firstOrNull { dir -> dir.name == "java" }
-            ?: throw IllegalArgumentException("[FeatureDialog] srcMainJavaDir is null")
-        showNotification(project, "getPackageName", srcMainJavaDir.toString())
-        return getPackageNameFromDir(srcMainJavaDir)
-    }
-
-    private fun getPackageNameFromDir(dir: PsiDirectory): String {
-        val packageNames = mutableListOf<String>()
-
-        var currentDir: PsiDirectory? = dir
-        while (currentDir != null && currentDir.name != "java") {
-            packageNames.add(currentDir.name)
-            currentDir = currentDir.parent
-        }
-
-        val joinToString = packageNames.reversed().joinToString(".")
-        showNotification(project, "getPackageNameFromDir", joinToString)
-        return joinToString
-    }
-
-    fun showNotification(project: Project, title: String, content: String) {
-        val notificationGroup = NotificationGroup.findRegisteredGroup("ru.redbyte.arch.notifications")
-            ?: NotificationGroup("ru.redbyte.arch.notifications", NotificationDisplayType.BALLOON, true)
-
-        val notification = notificationGroup.createNotification(
-            content, NotificationType.INFORMATION
-        )
-        Notifications.Bus.notify(notification, project)
     }
 
     private fun isSystemDirectory(name: String): Boolean {
