@@ -5,4 +5,5 @@ data class FeatureParams(
     val withDIFiles: Boolean,
     val withFragmentFiles: Boolean,
     val selectedDirectory: String,
+    val packageName: String
 )

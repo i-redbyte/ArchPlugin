@@ -9,12 +9,11 @@ class FeatureCreator(val project: Project) {
 
     fun createModules(
         feature: Feature,
-        targetDirectory: PsiDirectory,
-        packageName: String
+        targetDirectory: PsiDirectory
     ) {
         ApplicationManager.getApplication().runWriteAction {
             with(targetDirectory) {
-                MakeModule(feature).createModuleStructure(this, packageName = packageName)
+                MakeModule(feature).createModuleStructure(this)
             }
         }
     }

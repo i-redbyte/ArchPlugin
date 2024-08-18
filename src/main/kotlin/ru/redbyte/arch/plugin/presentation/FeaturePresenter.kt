@@ -14,7 +14,7 @@ interface FeaturePresenter {
 
     fun getTypeArray(): Array<String>
 
-    fun createFeature(params: FeatureParams, packageName: String)
+    fun createFeature(params: FeatureParams)
 
     fun validate(name: String): ValidationInfo?
 
@@ -32,7 +32,7 @@ class FeaturePresenterImpl(
         return Type.values().map { it.text }.toTypedArray()
     }
 
-    override fun createFeature(params: FeatureParams, packageName: String) {
+    override fun createFeature(params: FeatureParams) {
         try {
             val feature = when (type) {
                 Type.BaseFeature -> BaseFeature(params)
@@ -41,7 +41,7 @@ class FeaturePresenterImpl(
 
             val targetDirectory = findTargetDirectory(params.selectedDirectory)
             if (targetDirectory != null) {
-                featureCreator.createModules(feature, targetDirectory, packageName)
+                featureCreator.createModules(feature, targetDirectory)
                 featureView.closeSuccessfully()
             } else {
                 featureView.closeWithError("Target directory not found.")

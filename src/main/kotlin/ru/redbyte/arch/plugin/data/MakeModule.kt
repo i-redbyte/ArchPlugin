@@ -8,16 +8,18 @@ class MakeModule(private val feature: Feature) : Module() {
 
     private val names = NamesBuilder().build(feature.params.featureName)
 
-    override fun PsiDirectory.createJavaDirectory(): PsiDirectory {
-        return createSubdirectory(names.lowerCaseModuleName)
-    }
+    override fun PsiDirectory.createJavaDirectory(): PsiDirectory = createSubdirectory(names.lowerCaseModuleName)
 
-    override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory {
-        return createSubdirectory(names.moduleName)
-    }
+    override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory = createSubdirectory(names.moduleName)
 
-    override fun createModuleStructure(directory: PsiDirectory, packageName: String) {
-        super.createModuleStructure(directory, packageName)
+    override fun PsiDirectory.createPackageDirectories(): PsiDirectory = feature.params.packageName
+        .split(".")
+        .fold(this) { currentDirectory, dirName ->
+            currentDirectory.createSubdirectory(dirName)
+        }
+
+    override fun createModuleStructure(directory: PsiDirectory) {
+        super.createModuleStructure(directory)
         with(feature.params) {
             makeAndroidManifest()
             makeBuildGradle()
