@@ -6,16 +6,13 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.FeatureCreator
 import ru.redbyte.arch.plugin.data.FeatureParams
 import ru.redbyte.arch.plugin.data.getPackageName
-import ru.redbyte.arch.plugin.showMessage
 import java.awt.Component
 import java.awt.Dimension
-import java.io.File
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JCheckBox
@@ -31,11 +28,12 @@ interface FeatureView {
     fun closeWithError(message: String)
 
     fun enableCheckBoxes(enable: Boolean)
+
 }
 
 class FeatureDialog(private val project: Project) : DialogWrapper(true), FeatureView {
 
-    private val featurePresenter: FeaturePresenter = FeaturePresenterImpl(this, FeatureCreator(project))
+    private val presenter: FeaturePresenter = FeaturePresenterImpl(this, FeatureCreator(project))
 
     private val notificationGroup = NotificationGroup("Arch plugin errors", NotificationDisplayType.BALLOON, true)
 
@@ -43,7 +41,9 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         setOneLineMode(true)
         setPreferredWidth(350)
     }
-
+    private val packageName: String by lazy {
+        getPackageName(project)
+    }
     private val createDiCheckBox = JCheckBox("Create DI components").apply {
         isSelected = true
     }
@@ -51,13 +51,31 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         isSelected = true
     }
 
+    private val useCustomPackageCheckBox = JCheckBox("Use custom package name").apply {
+        isSelected = false
+    }
+
+    private val customPackageNameField = EditorTextField().apply {
+        setOneLineMode(true)
+        setPreferredWidth(350)
+        isEnabled = false
+        text = presenter.defaultPackageName ?: packageName
+    }
+
     private val directoriesComboBox = ComboBox(getTopLevelDirectories().toTypedArray())
 
-    private val typeList = ComboBox(featurePresenter.getTypeArray())
+    private val typeList = ComboBox(presenter.getTypeArray())
 
     init {
         init()
+        presenter.defaultPackageName = packageName
         title = "Create new feature"
+        useCustomPackageCheckBox.addActionListener {
+            customPackageNameField.isEnabled = useCustomPackageCheckBox.isSelected
+            if (!useCustomPackageCheckBox.isSelected) {
+                customPackageNameField.text = presenter.defaultPackageName ?: packageName
+            }
+        }
     }
 
     override fun createCenterPanel(): JComponent {
@@ -74,6 +92,8 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         featureNameField.alignmentX = Component.LEFT_ALIGNMENT
         createDiCheckBox.alignmentX = Component.LEFT_ALIGNMENT
         createFragment.alignmentX = Component.LEFT_ALIGNMENT
+        useCustomPackageCheckBox.alignmentX = Component.LEFT_ALIGNMENT
+        customPackageNameField.alignmentX = Component.LEFT_ALIGNMENT
         typeList.alignmentX = Component.LEFT_ALIGNMENT
         directoriesComboBox.alignmentX = Component.LEFT_ALIGNMENT
         directoryHint.alignmentX = Component.LEFT_ALIGNMENT
@@ -90,11 +110,16 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.add(typeList)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
+        dialogPanel.add(useCustomPackageCheckBox)
+        dialogPanel.add(customPackageNameField)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
+
         dialogPanel.add(createDiCheckBox)
         dialogPanel.add(createFragment)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         typeList.addActionListener {
-            featurePresenter.onTypeSelected(typeList.selectedItem as String)
+            presenter.onTypeSelected(typeList.selectedItem as String)
         }
 
         return dialogPanel
@@ -102,19 +127,25 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     override fun doOKAction() {
         val selectedDirectory = directoriesComboBox.selectedItem as String
-        featurePresenter.createFeature(
+        val customPackageName = if (useCustomPackageCheckBox.isSelected) {
+            customPackageNameField.text
+        } else {
+            presenter.defaultPackageName ?: packageName
+        }
+
+        presenter.createFeature(
             FeatureParams(
                 featureNameField.text,
                 createDiCheckBox.isSelected,
                 createFragment.isSelected,
                 selectedDirectory,
-                getPackageName(project)
+                customPackageName
             ),
         )
     }
 
     override fun doValidate(): ValidationInfo? {
-        return featurePresenter.validate(featureNameField.text)
+        return presenter.validate(featureNameField.text)
     }
 
     override fun closeSuccessfully() {

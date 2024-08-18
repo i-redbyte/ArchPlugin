@@ -1,5 +1,6 @@
 package ru.redbyte.arch.plugin.presentation
 
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
@@ -9,8 +10,8 @@ import ru.redbyte.arch.plugin.data.FeatureParams
 import ru.redbyte.arch.plugin.domain.BaseFeature
 import ru.redbyte.arch.plugin.domain.FragmentFeature
 
-
 interface FeaturePresenter {
+    var defaultPackageName: String?
 
     fun getTypeArray(): Array<String>
 
@@ -23,8 +24,10 @@ interface FeaturePresenter {
 
 class FeaturePresenterImpl(
     private val featureView: FeatureView,
-    private val featureCreator: FeatureCreator
+    private val featureCreator: FeatureCreator,
 ) : FeaturePresenter {
+
+    override var defaultPackageName: String? = null
 
     private var type = Type.FragmentFeature
 
@@ -82,6 +85,8 @@ class FeaturePresenterImpl(
 
         return psiProjectBaseDir.subdirectories.find { it.name == directoryName }
     }
+
+
 }
 
 enum class Type(val text: String) {
