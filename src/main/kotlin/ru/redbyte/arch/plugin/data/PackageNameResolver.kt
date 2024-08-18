@@ -11,11 +11,13 @@ fun getPackageName(project: Project): String {
 
     val projectBaseDir = LocalFileSystem.getInstance().findFileByPath(projectBasePath)
         ?: throw IllegalStateException("[getPackageName] Unable to find project base directory at $projectBasePath")
-    val packageNameFromSources = findTopLevelPackageName(projectBaseDir)
-    if (packageNameFromSources != null) {
-        return packageNameFromSources
+
+    val packageNameInBuildFile = findPackageNameInBuildFile(projectBaseDir)
+    if (packageNameInBuildFile != null) {
+        return packageNameInBuildFile
     }
-    return findPackageNameInBuildFile(projectBaseDir)
+
+    return findTopLevelPackageName(projectBaseDir)
         ?: throw IllegalStateException("[getPackageName] No package name found in project")
 }
 
@@ -54,11 +56,15 @@ private fun findTopLevelPackageName(directory: File): String? {
         if (file.isFile && (file.extension == "java" || file.extension == "kt")) {
             val packageName = extractPackageNameFromFile(file)
             if (packageName != null) {
-                return packageName
+                return extractTopLevelPackageName(packageName)
             }
         }
     }
     return null
+}
+
+private fun extractTopLevelPackageName(packageName: String): String {
+    return packageName.split('.').take(3).joinToString(".")
 }
 
 private fun extractPackageNameFromFile(file: File): String? {
