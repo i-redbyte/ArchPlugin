@@ -1,6 +1,5 @@
 package ru.redbyte.arch.plugin.presentation
 
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
@@ -11,7 +10,6 @@ import ru.redbyte.arch.plugin.domain.BaseFeature
 import ru.redbyte.arch.plugin.domain.FragmentFeature
 
 interface FeaturePresenter {
-    var defaultPackageName: String?
 
     fun getTypeArray(): Array<String>
 
@@ -26,8 +24,6 @@ class FeaturePresenterImpl(
     private val featureView: FeatureView,
     private val featureCreator: FeatureCreator,
 ) : FeaturePresenter {
-
-    override var defaultPackageName: String? = null
 
     private var type = Type.FragmentFeature
 

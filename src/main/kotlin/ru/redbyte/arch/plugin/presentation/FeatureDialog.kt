@@ -20,7 +20,6 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-
 interface FeatureView {
 
     fun closeSuccessfully()
@@ -41,7 +40,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         setOneLineMode(true)
         setPreferredWidth(350)
     }
-    private val packageName: String by lazy {
+    private val defaultPackageName: String by lazy {
         getPackageName(project)
     }
     private val createDiCheckBox = JCheckBox("Create DI components").apply {
@@ -59,7 +58,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         setOneLineMode(true)
         setPreferredWidth(350)
         isEnabled = false
-        text = presenter.defaultPackageName ?: packageName
+        text = defaultPackageName
     }
 
     private val directoriesComboBox = ComboBox(getTopLevelDirectories().toTypedArray())
@@ -68,12 +67,11 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     init {
         init()
-        presenter.defaultPackageName = packageName
         title = "Create new feature"
         useCustomPackageCheckBox.addActionListener {
             customPackageNameField.isEnabled = useCustomPackageCheckBox.isSelected
             if (!useCustomPackageCheckBox.isSelected) {
-                customPackageNameField.text = presenter.defaultPackageName ?: packageName
+                customPackageNameField.text = defaultPackageName
             }
         }
     }
@@ -130,7 +128,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         val customPackageName = if (useCustomPackageCheckBox.isSelected) {
             customPackageNameField.text
         } else {
-            presenter.defaultPackageName ?: packageName
+            defaultPackageName
         }
 
         presenter.createFeature(
