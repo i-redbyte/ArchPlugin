@@ -1,7 +1,8 @@
-package ru.redbyte.arch.plugin.data
+package ru.redbyte.arch.plugin.data.generation
 
 import com.intellij.psi.PsiDirectory
-import ru.redbyte.arch.plugin.data.tmp.*
+import ru.redbyte.arch.plugin.data.templates.*
+import ru.redbyte.arch.plugin.data.utils.NamesBuilder
 import ru.redbyte.arch.plugin.domain.Feature
 
 class MakeModule(private val feature: Feature) : Module() {

@@ -1,7 +1,7 @@
-package ru.redbyte.arch.plugin.data.tmp
+package ru.redbyte.arch.plugin.data.templates
 
-import ru.redbyte.arch.plugin.data.camelToSnakeCase
-import ru.redbyte.arch.plugin.domain.Feature
+import ru.redbyte.arch.plugin.data.utils.camelToSnakeCase
+
 
 class BuildGradleTemplate : Template<BuildGradleParams> {
 

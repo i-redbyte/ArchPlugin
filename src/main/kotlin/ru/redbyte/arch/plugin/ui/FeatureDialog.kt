@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.presentation
+package ru.redbyte.arch.plugin.ui
 
 import com.intellij.notification.*
 import com.intellij.openapi.project.Project
@@ -8,9 +8,9 @@ import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorTextField
-import ru.redbyte.arch.plugin.data.FeatureCreator
-import ru.redbyte.arch.plugin.data.FeatureParams
-import ru.redbyte.arch.plugin.data.getPackageName
+import ru.redbyte.arch.plugin.data.generation.FeatureCreator
+import ru.redbyte.arch.plugin.data.generation.FeatureParams
+import ru.redbyte.arch.plugin.data.utils.getPackageName
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.Box

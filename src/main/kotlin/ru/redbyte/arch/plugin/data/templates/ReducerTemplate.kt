@@ -1,6 +1,6 @@
-package ru.redbyte.arch.plugin.data.tmp
+package ru.redbyte.arch.plugin.data.templates
 
-import ru.redbyte.arch.plugin.data.*
+import ru.redbyte.arch.plugin.data.utils.*
 
 class ReducerTemplate : Template<ReducerParams> {
     override fun generate(params: ReducerParams): String {
@@ -19,7 +19,7 @@ class ReducerTemplate : Template<ReducerParams> {
                 "$TAB$OVERRIDE $FUN update(event: Event, state: ${name}State): Update<${name}State> {\n" +
                 "$TAB${TAB}if (event !is ${name}Event) return Update.idle()\n" +
                 "$TAB${TAB}when (event) {\n" +
-                "$TAB$TAB${TAB}${name}Event.OnScreenOpened -> {\n" +
+                "$TAB$TAB$TAB${name}Event.OnScreenOpened -> {\n" +
                 "$TAB$TAB$TAB${TAB}TODO(\"Release it\")\n" +
                 "$TAB$TAB$TAB}\n" +
                 "$TAB$TAB}\n" +

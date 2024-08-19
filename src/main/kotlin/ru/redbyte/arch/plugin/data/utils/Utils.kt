@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data
+package ru.redbyte.arch.plugin.data.utils
 
 import com.intellij.openapi.vfs.LocalFileSystem
 import java.io.File

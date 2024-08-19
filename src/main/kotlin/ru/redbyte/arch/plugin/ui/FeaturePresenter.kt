@@ -1,11 +1,11 @@
-package ru.redbyte.arch.plugin.presentation
+package ru.redbyte.arch.plugin.ui
 
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
-import ru.redbyte.arch.plugin.data.FeatureCreator
-import ru.redbyte.arch.plugin.data.FeatureParams
+import ru.redbyte.arch.plugin.data.generation.FeatureCreator
+import ru.redbyte.arch.plugin.data.generation.FeatureParams
 import ru.redbyte.arch.plugin.domain.BaseFeature
 import ru.redbyte.arch.plugin.domain.FragmentFeature
 

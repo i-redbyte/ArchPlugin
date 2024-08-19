@@ -1,6 +1,6 @@
-package ru.redbyte.arch.plugin.data.tmp
+package ru.redbyte.arch.plugin.data.templates
 
-import ru.redbyte.arch.plugin.data.TAB
+import ru.redbyte.arch.plugin.data.utils.TAB
 
 class FragmentLayoutTemplate : Template<NoParams> {
     override fun generate(params: NoParams): String {

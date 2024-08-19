@@ -1,6 +1,6 @@
-package ru.redbyte.arch.plugin.data.tmp
+package ru.redbyte.arch.plugin.data.templates
 
-import ru.redbyte.arch.plugin.data.*
+import ru.redbyte.arch.plugin.data.utils.*
 
 class EventTemplate : Template<EventParams> {
     override fun generate(params: EventParams): String {

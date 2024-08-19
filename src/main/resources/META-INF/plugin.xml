@@ -12,8 +12,8 @@
         <group>
             <add-to-group group-id="NewGroup" anchor="last"/>
             <separator/>
-            <action id="ru.redbyte.arch.plugin.NewFeatureAction"
-                    class="ru.redbyte.arch.plugin.NewFeatureAction"
+            <action id="ru.redbyte.arch.plugin.actions.NewFeatureAction"
+                    class="ru.redbyte.arch.plugin.actions.NewFeatureAction"
                     text="Feature"/>
         </group>
     </actions>
