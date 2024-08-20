@@ -44,19 +44,28 @@ class BuildGradleParams private constructor(
 
     val gradleIndent = "    "
 
+    val plugins: List<String> = listOf(
+        "libs.plugins.android.library",
+        "libs.plugins.kotlin.library",
+        "libs.plugins.hilt",
+        "libs.plugins.kotlin.compose",
+    )
     val applyFiles: List<String> = listOf(
-        "\"gradle/plugin/android.gradle\"",
-        "\"gradle/plugin/kotlin-library.gradle\""
+        "config.base",
+        "config.compose",
+        "config.navigation",
+        "config.test",
     )
     val dependenciesProjects: List<String> = listOf(
-        "implementation project(':common:lokalise')",
-        "implementation project(':common:models')"
+        "implementation project(path: ':_core:data')",
+        "implementation project(path: ':_core:domain')",
     )
     val dependenciesLibraries: List<String> = listOf(
-        "implementation kotlinLibs.kotlinxCoroutinesAndroid",
-        "implementation kotlinLibs.kotlinxCoroutinesRuntimeKtx"
+        "implementation libs.hilt.android"
     )
-    val annotationProcessors: List<String> = emptyList<String>()
+    val annotationProcessors: List<String> = listOf(
+        "ksp libs.hilt.androidCompiler"
+    )
 
     companion object {
         fun build(init: BuildGradleParamsBuilder.() -> Unit): BuildGradleParams {
@@ -78,8 +87,6 @@ class ScreenParams private constructor(
     lowerCaseFeatureName: String,
     camelCaseFeatureName: String,
     snakeCaseFeatureName: String,
-    val createDi: Boolean,
-    val withSetupBackNavigation: Boolean
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName, snakeCaseFeatureName) {
 
     companion object {
@@ -93,20 +100,17 @@ class ScreenParams private constructor(
         lateinit var lowerCaseFeatureName: String
         lateinit var camelCaseFeatureName: String
         lateinit var snakeCaseFeatureName: String
-        var createDi: Boolean = false
-        var withSetupBackNavigation: Boolean = false
 
         fun build() = ScreenParams(
             packageName,
             lowerCaseFeatureName,
             camelCaseFeatureName,
-            snakeCaseFeatureName,
-            createDi,
-            withSetupBackNavigation
+            snakeCaseFeatureName
         )
     }
 }
 
+//todo: fix or remove this class
 class EventParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
@@ -128,6 +132,7 @@ class EventParams private constructor(
     }
 }
 
+//todo: fix or remove this class
 class StateParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
@@ -149,6 +154,7 @@ class StateParams private constructor(
     }
 }
 
+//todo: fix or remove this class
 class ReducerParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
