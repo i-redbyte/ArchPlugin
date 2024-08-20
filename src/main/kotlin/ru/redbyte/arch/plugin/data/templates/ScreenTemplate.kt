@@ -14,25 +14,25 @@ class ScreenTemplate : Template<ScreenParams> {
             "$IMPORT ${params.packageName}.${params.lowerCaseFeatureName}.R"
         )
         return """
-            $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation
+$PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation
 
-            ${importList.sortedImports().joinToString("\n")}
+${importList.sortedImports().joinToString("\n")}
 
-            @$COMPOSABLE
-            $INTERNAL $FUN ${params.camelCaseFeatureName}Screen() { 
-                ${params.camelCaseFeatureName}Content()
-            }
+@$COMPOSABLE
+$INTERNAL $FUN ${params.camelCaseFeatureName}Screen() { 
+    ${params.camelCaseFeatureName}Content()
+}
             
-            @$COMPOSABLE
-            $INTERNAL $FUN ${params.camelCaseFeatureName}Content() { 
-                Column(
-                    modifier = Modifier
-                         .fillMaxSize()
-                         .padding(16.dp)
-                ){
-                   TODO("Make your screen")
-                }
-            }
+@$COMPOSABLE
+$INTERNAL $FUN ${params.camelCaseFeatureName}Content() { 
+    Column(
+        modifier = Modifier
+             .fillMaxSize()
+              padding(16.dp)
+    ){
+       TODO("Make your screen")
+    }
+}
         """.trimIndent()
     }
 }
