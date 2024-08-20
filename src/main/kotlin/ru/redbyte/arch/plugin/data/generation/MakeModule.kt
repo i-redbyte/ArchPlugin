@@ -52,8 +52,6 @@ class MakeModule(private val feature: Feature) : Module() {
                             lowerCaseFeatureName = names.lowerCaseModuleName
                             camelCaseFeatureName = names.camelCaseName
                             snakeCaseFeatureName = names.snakeCaseName
-                            createDi = false      // TODO: get with params
-                            withSetupBackNavigation = true // TODO: Add to params
                         }
                     )
                 )
