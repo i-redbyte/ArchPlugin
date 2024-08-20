@@ -65,7 +65,6 @@ class MakeModule(private val feature: Feature) : Module() {
                 BuildGradleParams.build {
                     packageName = feature.params.packageName
                     lowerCaseFeatureName = names.lowerCaseModuleName
-                    feature = this@MakeModule.feature
                 }
             )
         )

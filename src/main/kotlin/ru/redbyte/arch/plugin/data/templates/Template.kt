@@ -1,7 +1,5 @@
 package ru.redbyte.arch.plugin.data.templates
 
-import ru.redbyte.arch.plugin.domain.Feature
-
 interface Template<T : TemplateParams> {
     fun generate(params: T): String
 }
@@ -37,7 +35,6 @@ class ManifestParams private constructor(
 }
 
 class BuildGradleParams private constructor(
-    val feature: Feature,
     packageName: String,
     lowerCaseFeatureName: String
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName) {
@@ -74,11 +71,10 @@ class BuildGradleParams private constructor(
     }
 
     class BuildGradleParamsBuilder {
-        lateinit var feature: Feature
         lateinit var packageName: String
         lateinit var lowerCaseFeatureName: String
 
-        fun build() = BuildGradleParams(feature, packageName, lowerCaseFeatureName)
+        fun build() = BuildGradleParams(packageName, lowerCaseFeatureName)
     }
 }
 

@@ -44,7 +44,7 @@ class BuildGradleTemplate : Template<BuildGradleParams> {
     private fun StringBuilder.addAndroid(params: BuildGradleParams): StringBuilder {
         return append("android {")
             .addNewLine()
-            .append("${params.gradleIndent} namespace '${params.packageName}.${params.feature.params.featureName}'")
+            .append("${params.gradleIndent} namespace '${params.packageName}.${params.lowerCaseFeatureName}'")
             .addNewLine()
             .append("}")
     }
