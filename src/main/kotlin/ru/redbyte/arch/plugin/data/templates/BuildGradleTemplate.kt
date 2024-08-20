@@ -1,12 +1,11 @@
 package ru.redbyte.arch.plugin.data.templates
 
-import ru.redbyte.arch.plugin.data.utils.camelToSnakeCase
-
-
 class BuildGradleTemplate : Template<BuildGradleParams> {
 
     override fun generate(params: BuildGradleParams): String {
         return StringBuilder()
+            .addPluginsAlias(params)
+            .addNewLine()
             .addGradleApplyFiles(params)
             .addNewLine()
             .addAndroid(params)
@@ -18,19 +17,34 @@ class BuildGradleTemplate : Template<BuildGradleParams> {
 
     private fun StringBuilder.addNewLine(): StringBuilder = append("\n")
 
-    private fun StringBuilder.addGradleApplyFiles(params: BuildGradleParams): StringBuilder {
-        if (params.applyFiles.isEmpty()) return this
+    private fun StringBuilder.addPluginsAlias(params: BuildGradleParams): StringBuilder {
+        if (params.plugins.isEmpty()) return this
+        append("plugins {")
+        addNewLine()
         params.applyFiles.forEach { file ->
-            append("apply from: rootProject.file($file)")
+            append("${params.gradleIndent}alias $file")
             addNewLine()
         }
+        append("}")
         return this
     }
+
+    private fun StringBuilder.addGradleApplyFiles(params: BuildGradleParams): StringBuilder {
+        if (params.applyFiles.isEmpty()) return this
+        append("apply {")
+        addNewLine()
+        params.applyFiles.forEach { file ->
+            append("${params.gradleIndent}from($file)")
+            addNewLine()
+        }
+        append("}")
+        return this
+    }
+
     private fun StringBuilder.addAndroid(params: BuildGradleParams): StringBuilder {
         return append("android {")
             .addNewLine()
-            .append(params.gradleIndent)
-            .append("resourcePrefix 't_${params.feature.params.featureName.camelToSnakeCase()}_'")
+            .append("${params.gradleIndent} namespace '${params.packageName}.${params.feature.params.featureName}'")
             .addNewLine()
             .append("}")
     }
