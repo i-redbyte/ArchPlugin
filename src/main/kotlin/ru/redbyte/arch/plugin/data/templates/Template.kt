@@ -42,7 +42,7 @@ class BuildGradleParams(val feature: Feature) : TemplateParams {
 
 }
 
-class FragmentParams(
+class ScreenParams(
     val lowerCaseFeatureName: String,
     val camelCaseFeatureName: String,
     val snakeCaseFeatureName: String,

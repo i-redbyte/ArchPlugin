@@ -2,8 +2,8 @@ package ru.redbyte.arch.plugin.data.templates
 
 import ru.redbyte.arch.plugin.data.utils.*
 
-class FragmentTemplate : Template<FragmentParams> {
-    override fun generate(params: FragmentParams): String {
+class ScreenTemplate : Template<ScreenParams> {
+    override fun generate(params: ScreenParams): String {
         val importList = mutableListOf(
             "$IMPORT android.os.Bundle",
             "$IMPORT androidx.fragment.app.Fragment",

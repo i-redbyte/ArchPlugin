@@ -24,7 +24,6 @@ class MakeModule(private val feature: Feature) : Module() {
         with(feature.params) {
             makeAndroidManifest()
             makeBuildGradle()
-            makeFragmentLayout(withFragmentFiles)
             makePresentationPackage(withFragmentFiles)
             makeDIPackage(withDIFiles)
         }
@@ -84,8 +83,8 @@ class MakeModule(private val feature: Feature) : Module() {
             ?.apply {
                 addFile(
                     "${names.camelCaseName}Fragment.kt",
-                    FragmentTemplate().generate(
-                        FragmentParams(
+                    ScreenTemplate().generate(
+                        ScreenParams(
                             names.lowerCaseModuleName,
                             names.camelCaseName,
                             names.snakeCaseName,
@@ -97,19 +96,6 @@ class MakeModule(private val feature: Feature) : Module() {
             }
     }
 
-    private fun makeFragmentLayout(withFragmentFiles: Boolean) {
-        if (!withFragmentFiles) return
-        mainDirectory
-            ?.createSubdirectory("res")
-            ?.createSubdirectory("layout")
-            ?.apply {
-                //todo: add check is need create fragment
-                addFile(
-                    "t_${names.snakeCaseName}_fragment.xml",
-                    FragmentLayoutTemplate().generate(NoParams)
-                )
-            }
-    }
 
     private fun makeBuildGradle() {
         rootDirectory?.addFile(
