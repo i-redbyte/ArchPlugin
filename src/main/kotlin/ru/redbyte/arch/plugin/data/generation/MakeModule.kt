@@ -37,77 +37,51 @@ class MakeModule(private val feature: Feature) : Module() {
     private fun makePresentationPackage(withFragmentFiles: Boolean) {
         javaDirectory?.createSubdirectory("presentation")
         if (withFragmentFiles) makeUIPackage()
-        makeReducerPackage()
-
     }
 
-    private fun makeReducerPackage() {
-        javaDirectory
-            ?.findSubdirectory("presentation")
-            ?.createSubdirectory("reducer")
-            ?.apply {
-                addFile(
-                    "${names.camelCaseName}Event.kt",
-                    EventTemplate().generate(
-                        EventParams(
-                            names.lowerCaseModuleName,
-                            names.camelCaseName
-                        )
-                    )
-                )
-                addFile(
-                    "${names.camelCaseName}State.kt",
-                    StateTemplate().generate(
-                        StateParams(
-                            names.lowerCaseModuleName,
-                            names.camelCaseName
-                        )
-                    )
-                )
-                addFile(
-                    "${names.camelCaseName}Reducer.kt",
-                    ReducerTemplate().generate(
-                        ReducerParams(
-                            names.lowerCaseModuleName,
-                            names.camelCaseName
-                        )
-                    )
-                )
-            }
-    }
 
     private fun makeUIPackage() {
         javaDirectory
             ?.findSubdirectory("presentation")
-            ?.createSubdirectory("ui")
             ?.apply {
                 addFile(
-                    "${names.camelCaseName}Fragment.kt",
+                    "${names.camelCaseName}Screen.kt",
                     ScreenTemplate().generate(
-                        ScreenParams(
-                            names.lowerCaseModuleName,
-                            names.camelCaseName,
-                            names.snakeCaseName,
-                            false,      // TODO: get with params
-                            true // TODO: Add to params
-                        )
+                        ScreenParams.build {
+                            packageName = feature.params.packageName
+                            lowerCaseFeatureName = names.lowerCaseModuleName
+                            camelCaseFeatureName = names.camelCaseName
+                            snakeCaseFeatureName = names.snakeCaseName
+                            createDi = false      // TODO: get with params
+                            withSetupBackNavigation = true // TODO: Add to params
+                        }
                     )
                 )
             }
     }
 
-
     private fun makeBuildGradle() {
         rootDirectory?.addFile(
             "build.gradle",
-            BuildGradleTemplate().generate(BuildGradleParams(feature))
+            BuildGradleTemplate().generate(
+                BuildGradleParams.build {
+                    packageName = feature.params.packageName
+                    lowerCaseFeatureName = names.lowerCaseModuleName
+                    feature = this@MakeModule.feature
+                }
+            )
         )
     }
 
     private fun makeAndroidManifest() {
         mainDirectory?.addFile(
             "AndroidManifest.xml",
-            ManifestTemplate().generate(ManifestParams(names.lowerCaseModuleName))
+            ManifestTemplate().generate(
+                ManifestParams.build {
+                    packageName = feature.params.packageName
+                    lowerCaseFeatureName = names.lowerCaseModuleName
+                }
+            )
         )
     }
 }
