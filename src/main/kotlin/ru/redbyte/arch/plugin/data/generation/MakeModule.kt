@@ -26,6 +26,7 @@ class MakeModule(private val feature: Feature) : Module() {
             makeBuildGradle()
             makePresentationPackage()
             makeDIPackage(withDIFiles)
+            makeResValuesPackage()
         }
     }
 
@@ -73,5 +74,20 @@ class MakeModule(private val feature: Feature) : Module() {
                 }
             )
         )
+    }
+
+    private fun makeResValuesPackage() {
+        mainDirectory
+            ?.createSubdirectory("res")
+            ?.createSubdirectory("values")
+            ?.addFile(
+                "strings.xml",
+                StringsTemplate().generate(
+                    StringsParams.build {
+                        packageName = feature.params.packageName
+                        lowerCaseFeatureName = names.lowerCaseModuleName
+                    }
+                )
+            )
     }
 }

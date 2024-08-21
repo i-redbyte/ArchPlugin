@@ -1,5 +1,7 @@
 package ru.redbyte.arch.plugin.data.templates
 
+import kotlin.properties.Delegates
+
 interface Template<T : TemplateParams> {
     fun generate(params: T): String
 }
@@ -27,8 +29,8 @@ class ManifestParams private constructor(
     }
 
     class ManifestParamsBuilder {
-        lateinit var packageName: String
-        lateinit var lowerCaseFeatureName: String
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
 
         fun build() = ManifestParams(packageName, lowerCaseFeatureName)
     }
@@ -71,8 +73,8 @@ class BuildGradleParams private constructor(
     }
 
     class BuildGradleParamsBuilder {
-        lateinit var packageName: String
-        lateinit var lowerCaseFeatureName: String
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
 
         fun build() = BuildGradleParams(packageName, lowerCaseFeatureName)
     }
@@ -92,10 +94,10 @@ class ScreenParams private constructor(
     }
 
     class ScreenParamsBuilder {
-        lateinit var packageName: String
-        lateinit var lowerCaseFeatureName: String
-        lateinit var camelCaseFeatureName: String
-        lateinit var snakeCaseFeatureName: String
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseFeatureName: String by Delegates.notNull()
+        var snakeCaseFeatureName: String by Delegates.notNull()
 
         fun build() = ScreenParams(
             packageName,
@@ -106,7 +108,25 @@ class ScreenParams private constructor(
     }
 }
 
-//todo: fix or remove this class
+class StringsParams private constructor(
+    packageName: String,
+    lowerCaseFeatureName: String
+) : BaseFeatureParams(packageName, lowerCaseFeatureName) {
+    companion object {
+        fun build(init: StringsParamsBuilder.() -> Unit): StringsParams {
+            return StringsParamsBuilder().apply(init).build()
+        }
+    }
+
+    class StringsParamsBuilder {
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+
+        fun build() = StringsParams(packageName, lowerCaseFeatureName)
+    }
+}
+
+//todo: Remove or change bellow classes
 class EventParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
@@ -120,15 +140,14 @@ class EventParams private constructor(
     }
 
     class EventParamsBuilder {
-        lateinit var packageName: String
-        lateinit var lowerCaseFeatureName: String
-        lateinit var camelCaseFeatureName: String
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseFeatureName: String by Delegates.notNull()
 
         fun build() = EventParams(packageName, lowerCaseFeatureName, camelCaseFeatureName)
     }
 }
 
-//todo: fix or remove this class
 class StateParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
@@ -142,15 +161,14 @@ class StateParams private constructor(
     }
 
     class StateParamsBuilder {
-        lateinit var packageName: String
-        lateinit var lowerCaseFeatureName: String
-        lateinit var camelCaseFeatureName: String
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseFeatureName: String by Delegates.notNull()
 
         fun build() = StateParams(packageName, lowerCaseFeatureName, camelCaseFeatureName)
     }
 }
 
-//todo: fix or remove this class
 class ReducerParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
@@ -164,9 +182,9 @@ class ReducerParams private constructor(
     }
 
     class ReducerParamsBuilder {
-        lateinit var packageName: String
-        lateinit var lowerCaseFeatureName: String
-        lateinit var camelCaseFeatureName: String
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseFeatureName: String by Delegates.notNull()
 
         fun build() = ReducerParams(packageName, lowerCaseFeatureName, camelCaseFeatureName)
     }
