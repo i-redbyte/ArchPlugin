@@ -126,66 +126,31 @@ class StringsParams private constructor(
     }
 }
 
-//todo: Remove or change bellow classes
-class EventParams private constructor(
+class ContractParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
-    camelCaseFeatureName: String
+    camelCaseFeatureName: String,
+    val withState: Boolean,
+    val withActions: Boolean,
+    val withEffect: Boolean
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
 
     companion object {
-        fun build(init: EventParamsBuilder.() -> Unit): EventParams {
-            return EventParamsBuilder().apply(init).build()
+        fun build(init: ContractParamsBuilder.() -> Unit): ContractParams {
+            return ContractParamsBuilder().apply(init).build()
         }
     }
 
-    class EventParamsBuilder {
+    class ContractParamsBuilder {
         var packageName: String by Delegates.notNull()
         var lowerCaseFeatureName: String by Delegates.notNull()
         var camelCaseFeatureName: String by Delegates.notNull()
-
-        fun build() = EventParams(packageName, lowerCaseFeatureName, camelCaseFeatureName)
-    }
-}
-
-class StateParams private constructor(
-    packageName: String,
-    lowerCaseFeatureName: String,
-    camelCaseFeatureName: String
-) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
-
-    companion object {
-        fun build(init: StateParamsBuilder.() -> Unit): StateParams {
-            return StateParamsBuilder().apply(init).build()
-        }
-    }
-
-    class StateParamsBuilder {
-        var packageName: String by Delegates.notNull()
-        var lowerCaseFeatureName: String by Delegates.notNull()
-        var camelCaseFeatureName: String by Delegates.notNull()
-
-        fun build() = StateParams(packageName, lowerCaseFeatureName, camelCaseFeatureName)
-    }
-}
-
-class ReducerParams private constructor(
-    packageName: String,
-    lowerCaseFeatureName: String,
-    camelCaseFeatureName: String
-) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
-
-    companion object {
-        fun build(init: ReducerParamsBuilder.() -> Unit): ReducerParams {
-            return ReducerParamsBuilder().apply(init).build()
-        }
-    }
-
-    class ReducerParamsBuilder {
-        var packageName: String by Delegates.notNull()
-        var lowerCaseFeatureName: String by Delegates.notNull()
-        var camelCaseFeatureName: String by Delegates.notNull()
-
-        fun build() = ReducerParams(packageName, lowerCaseFeatureName, camelCaseFeatureName)
+        var withState: Boolean by Delegates.notNull()
+        var withActions: Boolean by Delegates.notNull()
+        var withEffect: Boolean by Delegates.notNull()
+        fun build() = ContractParams(
+            packageName, lowerCaseFeatureName, camelCaseFeatureName,
+            withState, withActions, withEffect
+        )
     }
 }

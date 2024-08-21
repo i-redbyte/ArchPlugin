@@ -49,6 +49,21 @@ class MakeModule(private val feature: Feature) : Module() {
                         }
                     )
                 )
+                if (feature.params.withState || feature.params.withActions || feature.params.withEffect) {
+                    addFile(
+                        "${names.camelCaseName}Contact.kt",
+                        ContractTemplate().generate(
+                            ContractParams.build {
+                                packageName = feature.params.packageName
+                                lowerCaseFeatureName = names.lowerCaseModuleName
+                                camelCaseFeatureName = names.camelCaseName
+                                withState = feature.params.withState
+                                withActions = feature.params.withActions
+                                withEffect = feature.params.withEffect
+                            }
+                        )
+                    )
+                }
             }
     }
 

@@ -15,8 +15,6 @@ class BuildGradleTemplate : Template<BuildGradleParams> {
             .toString()
     }
 
-    private fun StringBuilder.addNewLine(): StringBuilder = append("\n")
-
     private fun StringBuilder.addPluginsAlias(params: BuildGradleParams): StringBuilder {
         if (params.plugins.isEmpty()) return this
         append("plugins {")

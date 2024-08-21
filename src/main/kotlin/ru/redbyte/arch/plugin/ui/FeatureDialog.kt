@@ -5,14 +5,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
-import com.intellij.openapi.vfs.LocalFileSystem
-import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.generation.FeatureCreator
 import ru.redbyte.arch.plugin.data.generation.FeatureParams
 import ru.redbyte.arch.plugin.data.utils.getPackageName
 import ru.redbyte.arch.plugin.data.utils.loadTopLevelDirectories
-import ru.redbyte.arch.plugin.showMessage
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.Box
