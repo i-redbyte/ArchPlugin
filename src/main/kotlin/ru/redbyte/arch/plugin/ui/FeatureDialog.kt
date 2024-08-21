@@ -21,6 +21,8 @@ import javax.swing.JCheckBox
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
+import javax.swing.BoxLayout.X_AXIS
+import javax.swing.BoxLayout.Y_AXIS
 
 interface FeatureView {
 
@@ -62,6 +64,16 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     private val directoriesComboBox = ComboBox(topLevelDirectories.toTypedArray())
 
+    private val withStateCheckBox = JCheckBox("With State").apply {
+        isSelected = true
+    }
+    private val withActionsCheckBox = JCheckBox("With Actions").apply {
+        isSelected = true
+    }
+    private val withEffectCheckBox = JCheckBox("With Effect").apply {
+        isSelected = true
+    }
+
     init {
         init()
         title = "Create new feature"
@@ -75,7 +87,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     override fun createCenterPanel(): JComponent {
         val dialogPanel = JPanel()
-        val layout = BoxLayout(dialogPanel, BoxLayout.PAGE_AXIS)
+        var layout = BoxLayout(dialogPanel, Y_AXIS)
 
         dialogPanel.layout = layout
         val featureNameHint = JLabel("Feature name")
@@ -107,6 +119,18 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.add(createDiCheckBox)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
+        val checkBoxPanel = JPanel().apply {
+            layout = BoxLayout(this, X_AXIS)
+            alignmentX = Component.LEFT_ALIGNMENT
+            add(withStateCheckBox)
+            add(Box.createRigidArea(Dimension(10, 0)))
+            add(withActionsCheckBox)
+            add(Box.createRigidArea(Dimension(10, 0)))
+            add(withEffectCheckBox)
+        }
+        dialogPanel.add(checkBoxPanel)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
+
         return dialogPanel
     }
 
@@ -123,7 +147,10 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
                 featureName = featureNameField.text,
                 withDIFiles = createDiCheckBox.isSelected,
                 selectedDirectory = selectedDirectory,
-                packageName = packageName
+                packageName = packageName,
+                withState = withStateCheckBox.isSelected,
+                withActions = withActionsCheckBox.isSelected,
+                withEffect = withEffectCheckBox.isSelected
             ),
         )
     }
@@ -143,6 +170,9 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     override fun enableCheckBoxes(enable: Boolean) {
         createDiCheckBox.isEnabled = enable
+        withStateCheckBox.isEnabled = enable
+        withActionsCheckBox.isEnabled = enable
+        withEffectCheckBox.isEnabled = enable
     }
 
 }
