@@ -11,6 +11,7 @@ import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.data.generation.FeatureCreator
 import ru.redbyte.arch.plugin.data.generation.FeatureParams
 import ru.redbyte.arch.plugin.data.utils.getPackageName
+import ru.redbyte.arch.plugin.showMessage
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.Box
@@ -155,10 +156,15 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
                     .getInstance(project)
                     .findDirectory(it)
             } ?: return emptyList()
-
-        return psiProjectBaseDir.subdirectories
+        val directories = psiProjectBaseDir.subdirectories
             .filter { dir -> !isSystemDirectory(dir.name) }
             .map { it.name }
+            .toMutableList()
+        if (directories.remove("features")) {
+            directories.add(0, "features")
+        }
+        showMessage(project, msg = directories.toString())
+        return directories
     }
 
     private fun isSystemDirectory(name: String): Boolean {
