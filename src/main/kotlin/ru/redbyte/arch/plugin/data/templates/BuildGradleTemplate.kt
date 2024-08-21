@@ -21,7 +21,7 @@ class BuildGradleTemplate : Template<BuildGradleParams> {
         if (params.plugins.isEmpty()) return this
         append("plugins {")
         addNewLine()
-        params.applyFiles.forEach { file ->
+        params.plugins.forEach { file ->
             append("${params.gradleIndent}alias $file")
             addNewLine()
         }

@@ -40,13 +40,10 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         setOneLineMode(true)
         setPreferredWidth(350)
     }
-    private val defaultPackageName: String by lazy {
-        getPackageName(project)
-    }
+    private val defaultPackageName: String by lazy { getPackageName(project) }
+    private val topLevelDirectories: List<String> by lazy { loadTopLevelDirectories() }
+
     private val createDiCheckBox = JCheckBox("Create DI components").apply {
-        isSelected = true
-    }
-    private val createFragment = JCheckBox("Create fragment").apply {
         isSelected = true
     }
 
@@ -61,9 +58,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         text = defaultPackageName
     }
 
-    private val directoriesComboBox = ComboBox(getTopLevelDirectories().toTypedArray())
-
-    private val typeList = ComboBox(presenter.getTypeArray())
+    private val directoriesComboBox = ComboBox(topLevelDirectories.toTypedArray())
 
     init {
         init()
@@ -89,10 +84,8 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         featureNameDescription.alignmentX = Component.LEFT_ALIGNMENT
         featureNameField.alignmentX = Component.LEFT_ALIGNMENT
         createDiCheckBox.alignmentX = Component.LEFT_ALIGNMENT
-        createFragment.alignmentX = Component.LEFT_ALIGNMENT
         useCustomPackageCheckBox.alignmentX = Component.LEFT_ALIGNMENT
         customPackageNameField.alignmentX = Component.LEFT_ALIGNMENT
-        typeList.alignmentX = Component.LEFT_ALIGNMENT
         directoriesComboBox.alignmentX = Component.LEFT_ALIGNMENT
         directoryHint.alignmentX = Component.LEFT_ALIGNMENT
 
@@ -105,27 +98,19 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.add(featureNameDescription)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
-        dialogPanel.add(typeList)
-        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
-
         dialogPanel.add(useCustomPackageCheckBox)
         dialogPanel.add(customPackageNameField)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         dialogPanel.add(createDiCheckBox)
-        dialogPanel.add(createFragment)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
-
-        typeList.addActionListener {
-            presenter.onTypeSelected(typeList.selectedItem as String)
-        }
 
         return dialogPanel
     }
 
     override fun doOKAction() {
         val selectedDirectory = directoriesComboBox.selectedItem as String
-        val customPackageName = if (useCustomPackageCheckBox.isSelected) {
+        val packageName = if (useCustomPackageCheckBox.isSelected) {
             customPackageNameField.text
         } else {
             defaultPackageName
@@ -133,11 +118,10 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
         presenter.createFeature(
             FeatureParams(
-                featureNameField.text,
-                createDiCheckBox.isSelected,
-                createFragment.isSelected,
-                selectedDirectory,
-                customPackageName
+                featureName = featureNameField.text,
+                withDIFiles = createDiCheckBox.isSelected,
+                selectedDirectory = selectedDirectory,
+                packageName = packageName
             ),
         )
     }
@@ -157,10 +141,9 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     override fun enableCheckBoxes(enable: Boolean) {
         createDiCheckBox.isEnabled = enable
-        createFragment.isEnabled = enable
     }
 
-    private fun getTopLevelDirectories(): List<String> {
+    private fun loadTopLevelDirectories(): List<String> {
         val projectBaseDir = LocalFileSystem
             .getInstance()
             .findFileByPath(

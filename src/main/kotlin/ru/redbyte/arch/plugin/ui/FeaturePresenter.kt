@@ -6,18 +6,14 @@ import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
 import ru.redbyte.arch.plugin.data.generation.FeatureCreator
 import ru.redbyte.arch.plugin.data.generation.FeatureParams
-import ru.redbyte.arch.plugin.domain.BaseFeature
-import ru.redbyte.arch.plugin.domain.FragmentFeature
+import ru.redbyte.arch.plugin.domain.Feature
 
 interface FeaturePresenter {
-
-    fun getTypeArray(): Array<String>
 
     fun createFeature(params: FeatureParams)
 
     fun validate(name: String): ValidationInfo?
 
-    fun onTypeSelected(type: String)
 }
 
 class FeaturePresenterImpl(
@@ -25,66 +21,41 @@ class FeaturePresenterImpl(
     private val featureCreator: FeatureCreator,
 ) : FeaturePresenter {
 
-    private var type = Type.FragmentFeature
-
-    override fun getTypeArray(): Array<String> {
-        return Type.values().map { it.text }.toTypedArray()
-    }
-
     override fun createFeature(params: FeatureParams) {
         try {
-            val feature = when (type) {
-                Type.BaseFeature -> BaseFeature(params)
-                Type.FragmentFeature -> FragmentFeature(params)
-            }
-
+            val feature = Feature(params)
             val targetDirectory = findTargetDirectory(params.selectedDirectory)
-            if (targetDirectory != null) {
-                featureCreator.createModules(feature, targetDirectory)
-                featureView.closeSuccessfully()
-            } else {
-                featureView.closeWithError("Target directory not found.")
-            }
+                ?: throw IllegalArgumentException("Target directory not found.")
+            featureCreator.createModules(feature, targetDirectory)
+            featureView.closeSuccessfully()
+        } catch (e: IllegalArgumentException) {
+            featureView.closeWithError(e.message ?: "Unknown error")
         } catch (e: Exception) {
-            featureView.closeWithError("Error occurred: ${e.message}")
+            featureView.closeWithError("An unexpected error occurred: ${e.message}")
         }
     }
 
     override fun validate(name: String): ValidationInfo? {
-        if (name.isBlank()) {
-            return ValidationInfo("Feature name cannot be empty")
-        } else if (!name.matches(Regex("^[a-z][a-z0-9-]+"))) {
-            return ValidationInfo("Not valid feature name")
+        return when {
+            name.isBlank() -> ValidationInfo("Feature name cannot be empty")
+            !isValidFeatureName(name) -> ValidationInfo("Not valid feature name")
+            else -> null
         }
-        return null
     }
 
-    override fun onTypeSelected(type: String) {
-        Type.values().find { it.text == type }?.let {
-            this.type = it
-            featureView.enableCheckBoxes(it == Type.FragmentFeature)
-        }
+    private fun isValidFeatureName(name: String): Boolean {
+        return name.matches(Regex("^[a-z][a-z0-9-]+"))
     }
 
     private fun findTargetDirectory(directoryName: String): PsiDirectory? {
-        val projectBaseDir = LocalFileSystem
-            .getInstance()
-            .findFileByPath(
-                featureCreator.project.basePath ?: return null
-            )
-        val psiProjectBaseDir = projectBaseDir
-            ?.let {
-                PsiManager
-                    .getInstance(featureCreator.project)
-                    .findDirectory(it)
-            } ?: return null
-
-        return psiProjectBaseDir.subdirectories.find { it.name == directoryName }
+        val projectBaseDir = findProjectBaseDirectory() ?: return null
+        return projectBaseDir.subdirectories.find { it.name == directoryName }
     }
 
+    private fun findProjectBaseDirectory(): PsiDirectory? {
+        val projectBasePath = featureCreator.project.basePath ?: return null
+        val projectBaseDir = LocalFileSystem.getInstance().findFileByPath(projectBasePath) ?: return null
+        return PsiManager.getInstance(featureCreator.project).findDirectory(projectBaseDir)
+    }
 
-}
-
-enum class Type(val text: String) {
-    FragmentFeature("Fragment Feature"), BaseFeature("Base Feature")
 }

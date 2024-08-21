@@ -24,7 +24,7 @@ class MakeModule(private val feature: Feature) : Module() {
         with(feature.params) {
             makeAndroidManifest()
             makeBuildGradle()
-            makePresentationPackage(withFragmentFiles)
+            makePresentationPackage()
             makeDIPackage(withDIFiles)
         }
     }
@@ -34,15 +34,8 @@ class MakeModule(private val feature: Feature) : Module() {
         javaDirectory?.createSubdirectory("di")
     }
 
-    private fun makePresentationPackage(withFragmentFiles: Boolean) {
+    private fun makePresentationPackage() {
         javaDirectory?.createSubdirectory("presentation")
-        if (withFragmentFiles) makeUIPackage()
-    }
-
-
-    private fun makeUIPackage() {
-        javaDirectory
-            ?.findSubdirectory("presentation")
             ?.apply {
                 addFile(
                     "${names.camelCaseName}Screen.kt",
