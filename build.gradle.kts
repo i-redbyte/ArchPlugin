@@ -1,6 +1,6 @@
 plugins {
-    id("org.jetbrains.intellij") version "1.3.1"
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.intellij") version "1.14.1"
+    id("org.jetbrains.kotlin.jvm") version "1.9.10"
 }
 
 group = "ru.redbyte.arch"
