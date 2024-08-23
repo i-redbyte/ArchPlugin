@@ -22,17 +22,21 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Extract version without 'v' prefix
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
       - name: Build plugin
-        run: ./gradlew buildPlugin -Pdistribution=${{ github.ref_name }}
+        run: ./gradlew buildPlugin -Pdistribution=${{ env.VERSION }}
 
       - name: List files in build/libs
         run: ls -l ./build/libs/
 
-      - name: Debug ref_name
-        run: echo "ref_name is ${{ github.ref_name }}"
+      - name: Debug version
+        run: echo "Version is ${{ env.VERSION }}"
 
       - name: Verify JAR exists
-        run: test -f ./build/libs/ArchPlugin-${{ github.ref_name#v }}.jar || echo "File not found!"
+        run: test -f ./build/libs/ArchPlugin-${{ env.VERSION }}.jar || echo "File not found!"
 
       - name: Create Release
         id: create_release
@@ -51,6 +55,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/ArchPlugin-${{ github.ref_name#v }}.jar
-          asset_name: ArchPlugin-${{ github.ref_name#v }}.jar
+          asset_path: ./build/libs/ArchPlugin-${{ env.VERSION }}.jar
+          asset_name: ArchPlugin-${{ env.VERSION }}.jar
           asset_content_type: application/java-archive
