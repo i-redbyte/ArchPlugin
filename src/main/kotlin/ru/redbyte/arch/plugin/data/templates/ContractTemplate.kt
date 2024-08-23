@@ -14,9 +14,7 @@ $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation
 
 ${importList.sortedImports().joinToString("\n")}   
  
-${makeStateClass(params)}
-${makeActionsClass(params)}
-${makeEffectClass(params)}
+${makeStateClass(params)}${makeActionsClass(params)}${makeEffectClass(params)}
             """.trimIndent()
 
     }
@@ -28,6 +26,7 @@ $INTERNAL $DATA_CLASS ${params.camelCaseFeatureName}State(
 
 ) : ViewState
 
+
         """.trimIndent()
     }
 
@@ -37,7 +36,8 @@ $INTERNAL $DATA_CLASS ${params.camelCaseFeatureName}State(
 $INTERNAL $SEALED_CLASS ${params.camelCaseFeatureName}Actions : ViewEvent {  
 
 }
-            
+
+
         """.trimIndent()
     }
 
@@ -47,7 +47,7 @@ $INTERNAL $SEALED_CLASS ${params.camelCaseFeatureName}Actions : ViewEvent {
 $INTERNAL $SEALED_CLASS ${params.camelCaseFeatureName}Effect : ViewEffect {  
 
 }
-                 
+
         """.trimIndent()
     }
 
