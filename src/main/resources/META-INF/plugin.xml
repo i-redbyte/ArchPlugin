@@ -6,7 +6,6 @@
     <depends>com.intellij.modules.androidstudio</depends>
     <depends>org.jetbrains.android</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <notificationGroup id="ru.redbyte.arch.notifications" displayType="BALLOON" logByDefault="true"/>
     </extensions>
     <actions>
         <group>
