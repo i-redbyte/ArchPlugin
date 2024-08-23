@@ -22,9 +22,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Initialize Gradle Wrapper
-        run: ./gradlew wrapper
-
       - name: Build plugin
         run: ./gradlew buildPlugin -Pdistribution=${{ github.ref_name }}
 
