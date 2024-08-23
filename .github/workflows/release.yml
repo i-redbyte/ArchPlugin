@@ -35,6 +35,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+          automatic_release_tag: false
 
       - name: Upload JAR to release
         uses: actions/upload-release-asset@v1
