@@ -154,3 +154,32 @@ class ContractParams private constructor(
         )
     }
 }
+
+class ViewModelParams private constructor(
+    packageName: String,
+    lowerCaseFeatureName: String,
+    camelCaseFeatureName: String,
+    val withState: Boolean,
+    val withActions: Boolean,
+    val withEffect: Boolean
+) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
+
+    companion object {
+        fun build(init: ViewModelBuilder.() -> Unit): ViewModelParams {
+            return ViewModelBuilder().apply(init).build()
+        }
+    }
+
+    class ViewModelBuilder {
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseFeatureName: String by Delegates.notNull()
+        var withState: Boolean by Delegates.notNull()
+        var withActions: Boolean by Delegates.notNull()
+        var withEffect: Boolean by Delegates.notNull()
+        fun build() = ViewModelParams(
+            packageName, lowerCaseFeatureName, camelCaseFeatureName,
+            withState, withActions, withEffect
+        )
+    }
+}

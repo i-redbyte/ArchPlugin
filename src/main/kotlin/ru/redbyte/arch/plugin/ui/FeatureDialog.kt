@@ -45,7 +45,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
     private val topLevelDirectories: List<String> by lazy { loadTopLevelDirectories(project) }
 
     private val createDiCheckBox = JCheckBox("Create DI components").apply {
-        isSelected = true
+        isSelected = false
     }
 
     private val useCustomPackageCheckBox = JCheckBox("Use custom package name").apply {

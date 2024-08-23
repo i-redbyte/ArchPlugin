@@ -64,6 +64,19 @@ class MakeModule(private val feature: Feature) : Module() {
                         )
                     )
                 }
+                addFile(
+                    "${names.camelCaseName}ViewModel.kt",
+                    ViewModelTemplate().generate(
+                        ViewModelParams.build {
+                            packageName = feature.params.packageName
+                            lowerCaseFeatureName = names.lowerCaseModuleName
+                            camelCaseFeatureName = names.camelCaseName
+                            withState = feature.params.withState
+                            withActions = feature.params.withActions
+                            withEffect = feature.params.withEffect
+                        }
+                    )
+                )
             }
     }
 

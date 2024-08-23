@@ -19,12 +19,17 @@ $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation
 ${importList.sortedImports().joinToString("\n")}
 
 @$COMPOSABLE
-$INTERNAL $FUN ${params.camelCaseFeatureName}Screen() { 
-    ${params.camelCaseFeatureName}Content()
+$INTERNAL $FUN ${params.camelCaseFeatureName}Screen(viewModel: ${params.camelCaseFeatureName}ViewModel = hiltViewModel()) { 
+    val state by viewModel.viewStateFlow.collectAsState()
+    val eventHandler = viewModel::sendEvent
+    ${params.camelCaseFeatureName}Content(state, eventHandler)
 }
             
 @$COMPOSABLE
-$INTERNAL $FUN ${params.camelCaseFeatureName}Content() { 
+$INTERNAL $FUN ${params.camelCaseFeatureName}Content(
+    state: ${params.camelCaseFeatureName}State,
+    eventHandler: (${params.camelCaseFeatureName}Actions) -> Unit
+) { 
     Column(
         modifier = Modifier
              .fillMaxSize()
