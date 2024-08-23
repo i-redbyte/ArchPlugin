@@ -32,7 +32,7 @@ jobs:
         run: echo "ref_name is ${{ github.ref_name }}"
 
       - name: Verify JAR exists
-        run: test -f ./build/libs/ArchPlugin-${{ github.ref_name }}.jar || echo "File not found!"
+      run: test -f ./build/libs/ArchPlugin-${{ github.ref_name#v}}.jar || echo "File not found!"
 
       - name: Create Release
         id: create_release
@@ -51,6 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/ArchPlugin-${{ github.ref_name }}.jar
-          asset_name: ArchPlugin-${{ github.ref_name }}.jar
+          asset_path: ./build/libs/ArchPlugin-${{ github.ref_name#v}}.jar
+          asset_name: ArchPlugin-${{ github.ref_name#v}}.jar
           asset_content_type: application/java-archive
+
