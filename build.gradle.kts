@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij") version "1.14.1"
+    id("org.jetbrains.intellij") version "1.17.4"
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
 }
 
@@ -12,14 +12,14 @@ repositories {
 }
 
 intellij {
-    version.set("193.6911.18")
+    version.set("2023.1")
     plugins.set(listOf("android", "gradle"))
     type.set("IC")
 }
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("193")
+        sinceBuild.set("231")
         untilBuild.set("")
     }
     buildSearchableOptions {
