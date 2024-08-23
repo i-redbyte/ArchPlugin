@@ -51,7 +51,7 @@ class MakeModule(private val feature: Feature) : Module() {
                 )
                 if (feature.params.withState || feature.params.withActions || feature.params.withEffect) {
                     addFile(
-                        "${names.camelCaseName}Contact.kt",
+                        "${names.camelCaseName}Contract.kt",
                         ContractTemplate().generate(
                             ContractParams.build {
                                 packageName = feature.params.packageName
