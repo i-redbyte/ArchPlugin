@@ -28,6 +28,12 @@ jobs:
       - name: List files in build/libs
         run: ls -l ./build/libs/
 
+      - name: Debug ref_name
+        run: echo "ref_name is ${{ github.ref_name }}"
+
+      - name: Verify JAR exists
+        run: test -f ./build/libs/ArchPlugin-${{ github.ref_name }}.jar || echo "File not found!"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
