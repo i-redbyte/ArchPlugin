@@ -113,9 +113,6 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.add(customPackageNameField)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
-        dialogPanel.add(createDiCheckBox)
-        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
-
         val checkBoxPanel = JPanel().apply {
             layout = BoxLayout(this, X_AXIS)
             alignmentX = Component.LEFT_ALIGNMENT
@@ -126,6 +123,9 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
             add(withEffectCheckBox)
         }
         dialogPanel.add(checkBoxPanel)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
+
+        dialogPanel.add(createDiCheckBox)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         return dialogPanel
