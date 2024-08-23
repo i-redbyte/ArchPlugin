@@ -17,23 +17,13 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
+          distribution: 'temurin'
 
       - name: Build plugin
-        run: ./gradlew build
-
-      - name: Verify JAR exists
-        run: |
-          if [ ! -f ./build/libs/ArchPlugin-*.jar ]; then
-            echo "JAR file not found!"
-            exit 1
-          fi
+        run: ./gradlew buildPlugin -Pdistribution=${{ github.ref_name }}
 
       - name: List files in build/libs
         run: ls -l ./build/libs/
-
-      - name: Get the JAR file name
-        id: get_jar_name
-        run: echo "JAR_NAME=$(basename ./build/libs/ArchPlugin-*.jar)" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -52,6 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/${{ env.JAR_NAME }}
-          asset_name: ${{ env.JAR_NAME }}
+          asset_path: ./build/libs/ArchPlugin-${{ github.ref_name }}.jar
+          asset_name: ArchPlugin-${{ github.ref_name }}.jar
           asset_content_type: application/java-archive
