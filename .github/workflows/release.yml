@@ -21,6 +21,16 @@ jobs:
       - name: Build plugin
         run: ./gradlew build
 
+      - name: Verify JAR exists
+        run: |
+          if [ ! -f ./build/libs/ArchPlugin-*.jar ]; then
+            echo "JAR file not found!"
+            exit 1
+          fi
+
+      - name: List files in build/libs
+        run: ls -l ./build/libs/
+
       - name: Get the JAR file name
         id: get_jar_name
         run: echo "JAR_NAME=$(basename ./build/libs/ArchPlugin-*.jar)" >> $GITHUB_ENV
@@ -35,7 +45,6 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-          automatic_release_tag: false
 
       - name: Upload JAR to release
         uses: actions/upload-release-asset@v1
