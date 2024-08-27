@@ -31,12 +31,9 @@ fun loadTopLevelDirectories(project: Project): List<String> {
                 .getInstance(project)
                 .findDirectory(it)
         } ?: return emptyList()
-    val directories = psiProjectBaseDir.subdirectories
+
+    return psiProjectBaseDir.subdirectories
         .filter { dir -> !isSystemDirectory(dir.name) }
         .map { it.name }
-        .toMutableList()
-    if (directories.remove("features")) {
-        directories.add(0, "features")
-    }
-    return directories
+        .sortedWith(compareBy<String> { it != "feature" }.thenBy { it })
 }
