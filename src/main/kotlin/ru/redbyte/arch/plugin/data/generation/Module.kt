@@ -16,7 +16,7 @@ abstract class Module {
 
     abstract fun PsiDirectory.createPackageDirectories(): PsiDirectory
 
-    open fun createModuleStructure(directory: PsiDirectory/*, packageName: String*/) {
+    open fun createModuleStructure(directory: PsiDirectory) {
         directory.createRootFeatureDirectory().also { rootDirectory = it }
             .createSubdirectory("src")
             .createSubdirectory("main").also { mainDirectory = it }
