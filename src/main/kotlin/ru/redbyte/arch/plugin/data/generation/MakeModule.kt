@@ -1,16 +1,9 @@
 package ru.redbyte.arch.plugin.data.generation
 
-import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
 import ru.redbyte.arch.plugin.data.templates.*
 import ru.redbyte.arch.plugin.data.utils.NamesBuilder
 import ru.redbyte.arch.plugin.domain.Feature
-import java.io.File
-import java.io.IOException
 
 class MakeModule(private val feature: Feature) : Module() {
 
@@ -35,7 +28,8 @@ class MakeModule(private val feature: Feature) : Module() {
             makeDIPackage(withDIFiles)
             makeResValuesPackage()
         }
-        addModuleToSettingsGradle(directory)
+        SettingsGradleManager(directory.project)
+            .ensureModuleInSettings(directory, feature.params.featureName)
     }
 
     private fun makeDIPackage(withDIFiles: Boolean) {
@@ -122,55 +116,6 @@ class MakeModule(private val feature: Feature) : Module() {
         mainDirectory?.createSubdirectory("res")?.apply {
             createSubdirectory("values").addFile("strings.xml", stringsXmlContent)
             createSubdirectory("values-en").addFile("strings.xml", stringsXmlContent)
-        }
-    }
-
-    private fun addModuleToSettingsGradle(directory: PsiDirectory) {
-        val project = directory.project
-        val settingsFile = getSettingsFile(project) ?: return
-
-        val moduleName = generateModuleName(directory, project.basePath ?: return)
-
-        if (!isModuleIncluded(settingsFile, moduleName)) {
-            insertModuleInAlphabeticalOrder(project, settingsFile, moduleName)
-        }
-    }
-
-    private fun getSettingsFile(project: Project): PsiFile? {
-        val basePath = project.basePath ?: return null
-        val baseDir = LocalFileSystem.getInstance().findFileByPath(basePath) ?: return null
-        val settingsFile = baseDir.findChild("settings.gradle.kts") ?: baseDir.findChild("settings.gradle")
-        return settingsFile?.let { PsiManager.getInstance(project).findFile(it) }
-    }
-
-    private fun generateModuleName(directory: PsiDirectory, basePath: String): String {
-        val relativePath = directory.virtualFile.path
-            .removePrefix(basePath)
-            .replace(File.separator, ":")
-            .removePrefix(":")
-        return ":$relativePath:${feature.params.featureName.lowercase()}"
-    }
-
-    private fun isModuleIncluded(settingsFile: PsiFile, moduleName: String): Boolean {
-        return settingsFile.text.contains(moduleName)
-    }
-
-    private fun insertModuleInAlphabeticalOrder(project: Project, settingsFile: PsiFile, moduleName: String) {
-        WriteCommandAction.runWriteCommandAction(project) {
-            val document = settingsFile.viewProvider.document ?: return@runWriteCommandAction
-            val lines = document.text.split("\n").toMutableList()
-            val includeLines = lines.filter { it.startsWith("include") }
-            val insertIndex = includeLines.indexOfFirst { it > "include '$moduleName'" }
-
-            if (includeLines.isEmpty()) {
-                document.insertString(document.textLength, "\ninclude '$moduleName'")
-            } else if (insertIndex == -1) {
-                val lastIncludeLine = lines.indexOf(includeLines.last())
-                document.insertString(document.getLineEndOffset(lastIncludeLine), "\ninclude '$moduleName'")
-            } else {
-                val includeInsertLine = lines.indexOf(includeLines[insertIndex])
-                document.insertString(document.getLineStartOffset(includeInsertLine), "include '$moduleName'\n")
-            }
         }
     }
 
