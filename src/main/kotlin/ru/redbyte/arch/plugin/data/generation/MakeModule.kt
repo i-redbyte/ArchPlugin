@@ -105,17 +105,17 @@ class MakeModule(private val feature: Feature) : Module() {
     }
 
     private fun makeResValuesPackage() {
-        mainDirectory
-            ?.createSubdirectory("res")
-            ?.createSubdirectory("values")
-            ?.addFile(
-                "strings.xml",
-                StringsTemplate().generate(
-                    StringsParams.build {
-                        packageName = feature.params.packageName
-                        lowerCaseFeatureName = names.lowerCaseModuleName
-                    }
-                )
-            )
+        val stringsXmlContent = StringsTemplate().generate(
+            StringsParams.build {
+                packageName = feature.params.packageName
+                lowerCaseFeatureName = names.lowerCaseModuleName
+            }
+        )
+        mainDirectory?.createSubdirectory("res")?.apply {
+            createSubdirectory("values").addFile("strings.xml", stringsXmlContent)
+            createSubdirectory("values-en").addFile("strings.xml", stringsXmlContent)
+        }
     }
+
+
 }
