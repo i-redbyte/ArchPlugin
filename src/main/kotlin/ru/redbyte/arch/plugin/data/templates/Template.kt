@@ -83,6 +83,9 @@ class ScreenParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
     camelCaseFeatureName: String,
+    val withState: Boolean,
+    val withActions: Boolean,
+    val withEffect: Boolean
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
 
     companion object {
@@ -96,11 +99,12 @@ class ScreenParams private constructor(
         var lowerCaseFeatureName: String by Delegates.notNull()
         var camelCaseFeatureName: String by Delegates.notNull()
         var snakeCaseFeatureName: String by Delegates.notNull()
-
+        var withState: Boolean by Delegates.notNull()
+        var withActions: Boolean by Delegates.notNull()
+        var withEffect: Boolean by Delegates.notNull()
         fun build() = ScreenParams(
-            packageName,
-            lowerCaseFeatureName,
-            camelCaseFeatureName
+            packageName, lowerCaseFeatureName, camelCaseFeatureName,
+            withState, withActions, withEffect
         )
     }
 }

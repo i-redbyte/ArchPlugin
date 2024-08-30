@@ -49,6 +49,9 @@ class MakeModule(private val feature: Feature) : Module() {
                             lowerCaseFeatureName = names.lowerCaseModuleName
                             camelCaseFeatureName = names.camelCaseName
                             snakeCaseFeatureName = names.snakeCaseName
+                            withState = feature.params.withState
+                            withActions = feature.params.withActions
+                            withEffect = feature.params.withEffect
                         }
                     )
                 )
