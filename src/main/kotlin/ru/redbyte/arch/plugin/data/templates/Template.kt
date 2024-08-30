@@ -13,8 +13,7 @@ object NoParams : TemplateParams
 abstract class BaseFeatureParams(
     val packageName: String,
     val lowerCaseFeatureName: String,
-    val camelCaseFeatureName: String? = null,
-    val snakeCaseFeatureName: String? = null
+    val camelCaseFeatureName: String? = null
 ) : TemplateParams
 
 class ManifestParams private constructor(
@@ -84,8 +83,7 @@ class ScreenParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
     camelCaseFeatureName: String,
-    snakeCaseFeatureName: String,
-) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName, snakeCaseFeatureName) {
+) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
 
     companion object {
         fun build(init: ScreenParamsBuilder.() -> Unit): ScreenParams {
@@ -102,8 +100,7 @@ class ScreenParams private constructor(
         fun build() = ScreenParams(
             packageName,
             lowerCaseFeatureName,
-            camelCaseFeatureName,
-            snakeCaseFeatureName
+            camelCaseFeatureName
         )
     }
 }

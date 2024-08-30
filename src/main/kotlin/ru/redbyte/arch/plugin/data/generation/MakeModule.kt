@@ -24,6 +24,7 @@ class MakeModule(private val feature: Feature) : Module() {
         with(feature.params) {
             makeAndroidManifest()
             makeBuildGradle()
+            makeReadMe()
             makePresentationPackage()
             makeDIPackage(withDIFiles)
             makeResValuesPackage()
@@ -91,6 +92,13 @@ class MakeModule(private val feature: Feature) : Module() {
                     lowerCaseFeatureName = names.lowerCaseModuleName
                 }
             )
+        )
+    }
+
+    private fun makeReadMe() {
+        rootDirectory?.addFile(
+            "README.md",
+            ReadmeTemplate().generate(NoParams)
         )
     }
 
