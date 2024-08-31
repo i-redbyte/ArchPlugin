@@ -1,6 +1,6 @@
-package ru.redbyte.arch.plugin.data.templates
+package ru.redbyte.arch.plugin.templates
 
-import ru.redbyte.arch.plugin.data.utils.*
+import ru.redbyte.arch.plugin.utils.*
 
 class ScreenTemplate : Template<ScreenParams> {
 

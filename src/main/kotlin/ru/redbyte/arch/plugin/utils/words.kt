@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.utils
+package ru.redbyte.arch.plugin.utils
 
 const val INTERNAL = "internal"
 const val CLASS = "class"

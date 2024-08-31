@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.generation
+package ru.redbyte.arch.plugin.generation
 
 import com.intellij.openapi.fileTypes.PlainTextLanguage
 import com.intellij.psi.PsiDirectory

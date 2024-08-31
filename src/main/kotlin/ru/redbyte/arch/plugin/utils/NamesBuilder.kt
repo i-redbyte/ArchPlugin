@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.utils
+package ru.redbyte.arch.plugin.utils
 
 private val snakeRegex = "-[a-zA-Z]".toRegex()
 private val camelRegex = "(?<=[a-zA-Z])[A-Z]".toRegex()

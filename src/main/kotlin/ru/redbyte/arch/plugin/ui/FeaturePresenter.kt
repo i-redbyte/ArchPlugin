@@ -4,8 +4,8 @@ import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
-import ru.redbyte.arch.plugin.data.generation.FeatureCreator
-import ru.redbyte.arch.plugin.data.generation.FeatureParams
+import ru.redbyte.arch.plugin.generation.FeatureCreator
+import ru.redbyte.arch.plugin.generation.FeatureParams
 import ru.redbyte.arch.plugin.domain.Feature
 
 interface FeaturePresenter {

@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.templates
+package ru.redbyte.arch.plugin.templates
 
 class ManifestTemplate: Template<ManifestParams> {
     override fun generate(params: ManifestParams): String =

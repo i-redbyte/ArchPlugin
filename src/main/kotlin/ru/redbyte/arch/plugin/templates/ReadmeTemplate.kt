@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.templates
+package ru.redbyte.arch.plugin.templates
 
 class ReadmeTemplate : Template<NoParams> {
 

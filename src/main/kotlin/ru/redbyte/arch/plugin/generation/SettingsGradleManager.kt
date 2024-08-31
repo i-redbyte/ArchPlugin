@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.generation
+package ru.redbyte.arch.plugin.generation
 
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project

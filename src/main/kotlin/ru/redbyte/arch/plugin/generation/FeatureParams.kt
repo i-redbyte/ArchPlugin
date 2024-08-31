@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.data.generation
+package ru.redbyte.arch.plugin.generation
 
 data class FeatureParams(
     val featureName: String,

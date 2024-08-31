@@ -6,10 +6,10 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.EditorTextField
-import ru.redbyte.arch.plugin.data.generation.FeatureCreator
-import ru.redbyte.arch.plugin.data.generation.FeatureParams
-import ru.redbyte.arch.plugin.data.utils.getPackageName
-import ru.redbyte.arch.plugin.data.utils.loadTopLevelDirectories
+import ru.redbyte.arch.plugin.generation.FeatureCreator
+import ru.redbyte.arch.plugin.generation.FeatureParams
+import ru.redbyte.arch.plugin.utils.getPackageName
+import ru.redbyte.arch.plugin.utils.loadTopLevelDirectories
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.Box
