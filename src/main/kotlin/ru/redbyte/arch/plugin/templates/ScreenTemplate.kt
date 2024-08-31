@@ -5,6 +5,7 @@ import ru.redbyte.arch.plugin.utils.*
 class ScreenTemplate : Template<ScreenParams> {
 
     override fun generate(params: ScreenParams): String {
+
         fun generateStateParam(withState: Boolean): String {
             return if (withState) "state: ${params.camelCaseFeatureName}State," else ""
         }
@@ -32,9 +33,9 @@ class ScreenTemplate : Template<ScreenParams> {
             "$IMPORT ${params.packageName}.${params.lowerCaseFeatureName}.R"
         )
 
-        if (!params.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
-        if (!params.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
-        if (!params.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
+        if (!params.contract.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
+        if (!params.contract.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
+        if (!params.contract.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
 
         return """
 $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation
@@ -50,8 +51,8 @@ $INTERNAL $FUN ${params.camelCaseFeatureName}Screen(viewModel: ${params.camelCas
             
 @$COMPOSABLE
 $INTERNAL $FUN ${params.camelCaseFeatureName}Content(
-    ${generateStateParam(params.withState)}
-    ${generateActionsParam(params.withActions)}
+    ${generateStateParam(params.contract.withState)}
+    ${generateActionsParam(params.contract.withActions)}
 ) { 
     Column(
         modifier = Modifier
@@ -67,8 +68,8 @@ $INTERNAL $FUN ${params.camelCaseFeatureName}Content(
 $INTERNAL $FUN Preview${params.camelCaseFeatureName}Content() {
     OtpTheme {
         ${params.camelCaseFeatureName}Content(
-            ${generatePreviewState(params.withState)}
-            ${generatePreviewActions(params.withActions)}
+            ${generatePreviewState(params.contract.withState)}
+            ${generatePreviewActions(params.contract.withActions)}
         )
     }
 }

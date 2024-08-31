@@ -3,6 +3,8 @@ package ru.redbyte.arch.plugin.utils
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiManager
+import ru.redbyte.arch.plugin.generation.FeatureContract
+import ru.redbyte.arch.plugin.generation.FeatureParams
 import ru.redbyte.arch.plugin.templates.ContractParams
 import java.io.File
 
@@ -37,10 +39,4 @@ fun loadTopLevelDirectories(project: Project): List<String> {
         .filter { dir -> !isSystemDirectory(dir.name) }
         .map { it.name }
         .sortedWith(compareBy<String> { it != "feature" }.thenBy { it })
-}
-
-fun generateImports(params: ContractParams, importList: MutableList<String>) {
-    if (!params.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
-    if (!params.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
-    if (!params.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
 }

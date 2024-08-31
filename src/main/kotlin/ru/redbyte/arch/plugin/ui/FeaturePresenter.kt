@@ -24,7 +24,7 @@ class FeaturePresenterImpl(
     override fun createFeature(params: FeatureParams) {
         try {
             val feature = Feature(params)
-            val targetDirectory = findTargetDirectory(params.selectedDirectory)
+            val targetDirectory = findTargetDirectory(params.metadata.selectedDirectory)
                 ?: throw IllegalArgumentException("Target directory not found.")
             featureCreator.createModules(feature, targetDirectory)
             featureView.closeSuccessfully()

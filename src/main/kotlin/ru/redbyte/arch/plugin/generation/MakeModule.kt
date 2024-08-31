@@ -6,14 +6,15 @@ import ru.redbyte.arch.plugin.utils.NamesBuilder
 import ru.redbyte.arch.plugin.domain.Feature
 
 class MakeModule(private val feature: Feature) : Module() {
+    private val featureMetadata = feature.params.metadata
 
-    private val names = NamesBuilder().build(feature.params.featureName)
+    private val names = NamesBuilder().build(featureMetadata.featureName)
 
     override fun PsiDirectory.createJavaDirectory(): PsiDirectory = createSubdirectory(names.lowerCaseModuleName)
 
     override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory = createSubdirectory(names.moduleName)
 
-    override fun PsiDirectory.createPackageDirectories(): PsiDirectory = feature.params.packageName
+    override fun PsiDirectory.createPackageDirectories(): PsiDirectory = featureMetadata.packageName
         .split(".")
         .fold(this) { currentDirectory, dirName ->
             currentDirectory.createSubdirectory(dirName)
@@ -30,7 +31,7 @@ class MakeModule(private val feature: Feature) : Module() {
             makeResValuesPackage()
         }
         SettingsGradleManager(directory.project)
-            .ensureModuleInSettings(directory, feature.params.featureName)
+            .ensureModuleInSettings(directory, featureMetadata.featureName)
     }
 
     private fun makeDIPackage(withDIFiles: Boolean) {
@@ -39,51 +40,47 @@ class MakeModule(private val feature: Feature) : Module() {
     }
 
     private fun makePresentationPackage() {
-        javaDirectory?.createSubdirectory("presentation")
-            ?.apply {
-                addFile(
-                    "${names.camelCaseName}Screen.kt",
-                    ScreenTemplate().generate(
-                        ScreenParams.build {
-                            packageName = feature.params.packageName
-                            lowerCaseFeatureName = names.lowerCaseModuleName
-                            camelCaseFeatureName = names.camelCaseName
-                            snakeCaseFeatureName = names.snakeCaseName
-                            withState = feature.params.withState
-                            withActions = feature.params.withActions
-                            withEffect = feature.params.withEffect
-                        }
-                    )
-                )
-                if (feature.params.withState || feature.params.withActions || feature.params.withEffect) {
+        with(feature.params) {
+            javaDirectory?.createSubdirectory("presentation")
+                ?.apply {
                     addFile(
-                        "${names.camelCaseName}Contract.kt",
-                        ContractTemplate().generate(
-                            ContractParams.build {
-                                packageName = feature.params.packageName
+                        "${names.camelCaseName}Screen.kt",
+                        ScreenTemplate().generate(
+                            ScreenParams.build {
+                                packageName = metadata.packageName
                                 lowerCaseFeatureName = names.lowerCaseModuleName
                                 camelCaseFeatureName = names.camelCaseName
-                                withState = feature.params.withState
-                                withActions = feature.params.withActions
-                                withEffect = feature.params.withEffect
+                                snakeCaseFeatureName = names.snakeCaseName
+                                contract = contractParam
+                            }
+                        )
+                    )
+                    if (contractParam.withState || contractParam.withActions || contractParam.withEffect) {
+                        addFile(
+                            "${names.camelCaseName}Contract.kt",
+                            ContractTemplate().generate(
+                                ContractParams.build {
+                                    packageName = metadata.packageName
+                                    lowerCaseFeatureName = names.lowerCaseModuleName
+                                    camelCaseFeatureName = names.camelCaseName
+                                    contract = contractParam
+                                }
+                            )
+                        )
+                    }
+                    addFile(
+                        "${names.camelCaseName}ViewModel.kt",
+                        ViewModelTemplate().generate(
+                            ViewModelParams.build {
+                                packageName = metadata.packageName
+                                lowerCaseFeatureName = names.lowerCaseModuleName
+                                camelCaseFeatureName = names.camelCaseName
+                                contract = contractParam
                             }
                         )
                     )
                 }
-                addFile(
-                    "${names.camelCaseName}ViewModel.kt",
-                    ViewModelTemplate().generate(
-                        ViewModelParams.build {
-                            packageName = feature.params.packageName
-                            lowerCaseFeatureName = names.lowerCaseModuleName
-                            camelCaseFeatureName = names.camelCaseName
-                            withState = feature.params.withState
-                            withActions = feature.params.withActions
-                            withEffect = feature.params.withEffect
-                        }
-                    )
-                )
-            }
+        }
     }
 
     private fun makeBuildGradle() {
@@ -91,7 +88,7 @@ class MakeModule(private val feature: Feature) : Module() {
             "build.gradle",
             BuildGradleTemplate().generate(
                 BuildGradleParams.build {
-                    packageName = feature.params.packageName
+                    packageName = featureMetadata.packageName
                     lowerCaseFeatureName = names.lowerCaseModuleName
                 }
             )
@@ -110,7 +107,7 @@ class MakeModule(private val feature: Feature) : Module() {
             "AndroidManifest.xml",
             ManifestTemplate().generate(
                 ManifestParams.build {
-                    packageName = feature.params.packageName
+                    packageName = featureMetadata.packageName
                     lowerCaseFeatureName = names.lowerCaseModuleName
                 }
             )
@@ -120,7 +117,7 @@ class MakeModule(private val feature: Feature) : Module() {
     private fun makeResValuesPackage() {
         val stringsXmlContent = StringsTemplate().generate(
             StringsParams.build {
-                packageName = feature.params.packageName
+                packageName = featureMetadata.packageName
                 lowerCaseFeatureName = names.lowerCaseModuleName
             }
         )

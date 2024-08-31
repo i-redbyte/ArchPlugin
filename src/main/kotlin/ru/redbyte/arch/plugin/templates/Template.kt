@@ -1,5 +1,6 @@
 package ru.redbyte.arch.plugin.templates
 
+import ru.redbyte.arch.plugin.generation.FeatureContract
 import kotlin.properties.Delegates
 
 interface Template<T : TemplateParams> {
@@ -83,9 +84,7 @@ class ScreenParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
     camelCaseFeatureName: String,
-    val withState: Boolean,
-    val withActions: Boolean,
-    val withEffect: Boolean
+    val contract: FeatureContract
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
 
     companion object {
@@ -99,12 +98,10 @@ class ScreenParams private constructor(
         var lowerCaseFeatureName: String by Delegates.notNull()
         var camelCaseFeatureName: String by Delegates.notNull()
         var snakeCaseFeatureName: String by Delegates.notNull()
-        var withState: Boolean by Delegates.notNull()
-        var withActions: Boolean by Delegates.notNull()
-        var withEffect: Boolean by Delegates.notNull()
+        var contract: FeatureContract by Delegates.notNull()
         fun build() = ScreenParams(
             packageName, lowerCaseFeatureName, camelCaseFeatureName,
-            withState, withActions, withEffect
+            contract
         )
     }
 }
@@ -131,9 +128,7 @@ class ContractParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
     camelCaseFeatureName: String,
-    val withState: Boolean,
-    val withActions: Boolean,
-    val withEffect: Boolean
+    val contract: FeatureContract
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
 
     companion object {
@@ -146,12 +141,10 @@ class ContractParams private constructor(
         var packageName: String by Delegates.notNull()
         var lowerCaseFeatureName: String by Delegates.notNull()
         var camelCaseFeatureName: String by Delegates.notNull()
-        var withState: Boolean by Delegates.notNull()
-        var withActions: Boolean by Delegates.notNull()
-        var withEffect: Boolean by Delegates.notNull()
+        var contract: FeatureContract by Delegates.notNull()
         fun build() = ContractParams(
             packageName, lowerCaseFeatureName, camelCaseFeatureName,
-            withState, withActions, withEffect
+            contract
         )
     }
 }
@@ -160,9 +153,7 @@ class ViewModelParams private constructor(
     packageName: String,
     lowerCaseFeatureName: String,
     camelCaseFeatureName: String,
-    val withState: Boolean,
-    val withActions: Boolean,
-    val withEffect: Boolean
+    val contract: FeatureContract
 ) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseFeatureName) {
 
     companion object {
@@ -175,12 +166,10 @@ class ViewModelParams private constructor(
         var packageName: String by Delegates.notNull()
         var lowerCaseFeatureName: String by Delegates.notNull()
         var camelCaseFeatureName: String by Delegates.notNull()
-        var withState: Boolean by Delegates.notNull()
-        var withActions: Boolean by Delegates.notNull()
-        var withEffect: Boolean by Delegates.notNull()
+        var contract: FeatureContract by Delegates.notNull()
         fun build() = ViewModelParams(
             packageName, lowerCaseFeatureName, camelCaseFeatureName,
-            withState, withActions, withEffect
+            contract
         )
     }
 }

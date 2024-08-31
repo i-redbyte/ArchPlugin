@@ -5,9 +5,9 @@ import ru.redbyte.arch.plugin.utils.*
 class ViewModelTemplate : Template<ViewModelParams> {
     override fun generate(params: ViewModelParams): String {
         val importList = mutableListOf<String>()
-        if (!params.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
-        if (!params.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
-        if (!params.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
+        if (!params.contract.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
+        if (!params.contract.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
+        if (!params.contract.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
         importList.addAll(
             listOf(
                 "$IMPORT javax.inject.Inject",
@@ -16,8 +16,8 @@ class ViewModelTemplate : Template<ViewModelParams> {
                 "$IMPORT androidx.lifecycle.viewModelScope",
             )
         )
-        val viewState = if (params.withState) "${params.camelCaseFeatureName}State" else "ViewState"
-        val viewActions = if (params.withActions) "${params.camelCaseFeatureName}Actions" else "ViewEvent"
+        val viewState = if (params.contract.withState) "${params.camelCaseFeatureName}State" else "ViewState"
+        val viewActions = if (params.contract.withActions) "${params.camelCaseFeatureName}Actions" else "ViewEvent"
         return """
 $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation        
 
@@ -43,9 +43,9 @@ $INTERNAL $CLASS ${params.camelCaseFeatureName}ViewModel @Inject constructor(
     }
 
     private fun makeViewModelContent(params: ViewModelParams): String {
-        val state = if (params.withState) "${params.camelCaseFeatureName}State" else "ViewState"
-        val actions = if (params.withActions) "${params.camelCaseFeatureName}Actions" else "ViewEvent"
-        val effect = if (params.withEffect) "${params.camelCaseFeatureName}Effect" else "ViewEffect"
+        val state = if (params.contract.withState) "${params.camelCaseFeatureName}State" else "ViewState"
+        val actions = if (params.contract.withActions) "${params.camelCaseFeatureName}Actions" else "ViewEvent"
+        val effect = if (params.contract.withEffect) "${params.camelCaseFeatureName}Effect" else "ViewEffect"
         return "$state, $actions, $effect"
     }
 }
