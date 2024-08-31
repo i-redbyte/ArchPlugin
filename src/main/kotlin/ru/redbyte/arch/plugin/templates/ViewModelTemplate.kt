@@ -5,9 +5,7 @@ import ru.redbyte.arch.plugin.utils.*
 class ViewModelTemplate : Template<ViewModelParams> {
     override fun generate(params: ViewModelParams): String {
         val importList = mutableListOf<String>()
-        if (!params.contract.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
-        if (!params.contract.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
-        if (!params.contract.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
+        fillImportsByContract(params.contract, params.packageName, importList, true)
         importList.addAll(
             listOf(
                 "$IMPORT javax.inject.Inject",

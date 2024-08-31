@@ -7,6 +7,9 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.EditorTextField
 import ru.redbyte.arch.plugin.generation.*
+import ru.redbyte.arch.plugin.generation.models.FeatureContract
+import ru.redbyte.arch.plugin.generation.models.FeatureMetadata
+import ru.redbyte.arch.plugin.generation.models.FeatureParams
 import ru.redbyte.arch.plugin.utils.getPackageName
 import ru.redbyte.arch.plugin.utils.loadTopLevelDirectories
 import java.awt.Component

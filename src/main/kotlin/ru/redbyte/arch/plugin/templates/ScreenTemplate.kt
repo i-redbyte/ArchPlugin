@@ -33,9 +33,7 @@ class ScreenTemplate : Template<ScreenParams> {
             "$IMPORT ${params.packageName}.${params.lowerCaseFeatureName}.R"
         )
 
-        if (!params.contract.withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
-        if (!params.contract.withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
-        if (!params.contract.withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
+        fillImportsByContract(params.contract, params.packageName, importList, true)
 
         return """
 $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation

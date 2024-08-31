@@ -1,6 +1,6 @@
 package ru.redbyte.arch.plugin.templates
 
-import ru.redbyte.arch.plugin.generation.FeatureContract
+import ru.redbyte.arch.plugin.generation.models.FeatureContract
 import kotlin.properties.Delegates
 
 interface Template<T : TemplateParams> {

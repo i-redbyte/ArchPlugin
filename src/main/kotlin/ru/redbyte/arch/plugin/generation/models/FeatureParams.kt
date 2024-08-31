@@ -1,4 +1,4 @@
-package ru.redbyte.arch.plugin.generation
+package ru.redbyte.arch.plugin.generation.models
 
 data class FeatureParams(
     val metadata: FeatureMetadata,

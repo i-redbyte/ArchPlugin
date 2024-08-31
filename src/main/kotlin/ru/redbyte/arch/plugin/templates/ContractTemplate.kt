@@ -4,12 +4,8 @@ import ru.redbyte.arch.plugin.utils.*
 
 class ContractTemplate : Template<ContractParams> {
     override fun generate(params: ContractParams): String {
-        val (withState, withActions, withEffect) = params.contract
         val importList = mutableListOf<String>()
-        if (withState) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewState")
-        if (withActions) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEvent")
-        if (withEffect) importList.add("$IMPORT ${params.packageName}.presentation.base.ViewEffect")
-
+        fillImportsByContract(params.contract, params.packageName, importList)
         return """
 $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation        
 
