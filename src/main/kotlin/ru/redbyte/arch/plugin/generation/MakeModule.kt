@@ -3,13 +3,18 @@ package ru.redbyte.arch.plugin.generation
 import com.intellij.psi.PsiDirectory
 import ru.redbyte.arch.plugin.utils.NamesBuilder
 import ru.redbyte.arch.plugin.domain.Feature
-import kotlin.properties.Delegates
+import ru.redbyte.arch.plugin.generation.builder.ArtifactBuilder
 
-class MakeModule(private val feature: Feature) : Module() {
+
+class MakeModule(feature: Feature) : Module() {
     private val featureMetadata = feature.params.metadata
+    private val withDIFiles = feature.params.withDIFiles
+    private val contractParam = feature.params.contractParam
 
     private val names = NamesBuilder().build(featureMetadata.featureName)
-    private var artifactFactory: ArtifactFactory by Delegates.notNull()
+    private val artifactBuilder: ArtifactBuilder by lazy(mode = LazyThreadSafetyMode.NONE) {
+        ArtifactBuilder(featureMetadata, names, rootDirectory, mainDirectory, javaDirectory)
+    }
 
     override fun PsiDirectory.createJavaDirectory(): PsiDirectory = createSubdirectory(names.lowerCaseModuleName)
 
@@ -23,15 +28,15 @@ class MakeModule(private val feature: Feature) : Module() {
 
     override fun createModuleStructure(directory: PsiDirectory) {
         super.createModuleStructure(directory)
-        artifactFactory = ArtifactFactory(
-            featureMetadata,
-            names,
-            rootDirectory,
-            mainDirectory,
-            javaDirectory
-        )
+        artifactBuilder
+            .addManifest()
+            .addBuildGradle()
+            .addReadMe()
+            .addPresentationPackage(contractParam)
+            .addDIPackage(withDIFiles)
+            .addResValuesPackage()
+            .build()
 
-        artifactFactory.createAll(feature.params)
         SettingsGradleManager(directory.project)
             .ensureModuleInSettings(directory, featureMetadata.featureName)
     }
