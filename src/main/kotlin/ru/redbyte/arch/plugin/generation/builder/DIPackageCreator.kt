@@ -7,8 +7,7 @@ class DIPackageCreator(
     private val withDIFiles: Boolean
 ) : ArtifactCreator {
     override fun create() {
-        if (withDIFiles) {
-            javaDirectory?.createSubdirectory("di")
-        }
+        if (!withDIFiles) return
+        javaDirectory?.createSubdirectory("di")
     }
 }
