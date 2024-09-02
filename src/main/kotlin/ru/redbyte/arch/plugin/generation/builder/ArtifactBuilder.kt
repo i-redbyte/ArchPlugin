@@ -34,8 +34,8 @@ class ArtifactBuilder(
         return this
     }
 
-    fun addDIPackage(withDIFiles: Boolean): ArtifactBuilder {
-        artifactCreators.add(DIPackageCreator(javaDirectory, withDIFiles))
+    fun addDIPackage(): ArtifactBuilder {
+        artifactCreators.add(DIPackageCreator(javaDirectory))
         return this
     }
 

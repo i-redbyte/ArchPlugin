@@ -28,14 +28,14 @@ class MakeModule(feature: Feature) : Module() {
 
     override fun createModuleStructure(directory: PsiDirectory) {
         super.createModuleStructure(directory)
-        artifactBuilder
-            .addManifest()
-            .addBuildGradle()
-            .addReadMe()
-            .addPresentationPackage(contractParam)
-            .addDIPackage(withDIFiles)
-            .addResValuesPackage()
-            .build()
+        artifactBuilder.apply {
+            addManifest()
+            addBuildGradle()
+            addReadMe()
+            addPresentationPackage(contractParam)
+            if (withDIFiles) addDIPackage()
+            addResValuesPackage()
+        }.build()
 
         SettingsGradleManager(directory.project)
             .ensureModuleInSettings(directory, featureMetadata.featureName)
