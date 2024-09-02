@@ -173,3 +173,22 @@ class ViewModelParams private constructor(
         )
     }
 }
+
+
+class DIParams private constructor(
+    packageName: String,
+    lowerCaseFeatureName: String
+) : BaseFeatureParams(packageName, lowerCaseFeatureName) {
+    companion object {
+        fun build(init: DIParamsBuilder.() -> Unit): DIParams {
+            return DIParamsBuilder().apply(init).build()
+        }
+    }
+
+    class DIParamsBuilder {
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+
+        fun build() = DIParams(packageName, lowerCaseFeatureName)
+    }
+}

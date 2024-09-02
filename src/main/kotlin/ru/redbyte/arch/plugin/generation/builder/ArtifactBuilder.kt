@@ -35,7 +35,7 @@ class ArtifactBuilder(
     }
 
     fun addDIPackage(): ArtifactBuilder {
-        artifactCreators.add(DIPackageCreator(javaDirectory))
+        artifactCreators.add(DIPackageCreator(javaDirectory, featureMetadata, names))
         return this
     }
 
