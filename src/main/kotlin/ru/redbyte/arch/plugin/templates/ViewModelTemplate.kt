@@ -23,18 +23,18 @@ ${importList.sortedImports().joinToString("\n")}
 
 @HiltViewModel
 $INTERNAL $CLASS ${params.camelCaseFeatureName}ViewModel @Inject constructor(
-    private val navigator: Navigator
+${TAB}private val navigator: Navigator
 ) : BaseViewModel<${makeViewModelContent(params)}>() { 
 
-    override fun setInitialState(): $viewState(){
-        return $viewState()
-    }
+${TAB}override fun setInitialState(): $viewState(){
+${TAB}${TAB}return $viewState()
+${TAB}}
     
-    override suspend fun handleEvents(event$viewActions) {
-        when (event) {
-           TODO("Add your events")
-        }
-    }
+${TAB}override suspend fun handleEvents(event$viewActions) {
+${TAB}${TAB}when (event) {
+${TAB}${TAB}${TAB}TODO("Add your events")
+${TAB}${TAB}}
+${TAB}}
     
 }
         """.trimIndent()

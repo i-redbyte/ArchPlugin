@@ -21,10 +21,12 @@ ${importList.sortedImports().joinToString("\n")}
 
 @$MODULE
 @InstallIn($VIEW_MODEL_COMPONENT::$CLASS)
-$INTERNAL $CLASS ${params.camelCaseFeatureName}Module{
-    //@$PROVIDES
-    //$FUN yours(
-    //)
+$INTERNAL $CLASS ${params.camelCaseFeatureName}$MODULE {
+
+$TAB//@$PROVIDES
+$TAB//$FUN yours(
+$TAB//)
+    
 }
         """.trimIndent()
     }

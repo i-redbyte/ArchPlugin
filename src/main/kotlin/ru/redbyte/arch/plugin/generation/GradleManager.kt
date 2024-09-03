@@ -6,6 +6,9 @@ import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
+import ru.redbyte.arch.plugin.utils.IMPLEMENTATION
+import ru.redbyte.arch.plugin.utils.PROJECT
+import ru.redbyte.arch.plugin.utils.TAB
 import java.io.File
 
 class GradleManager(private val project: Project) {
@@ -87,9 +90,9 @@ class GradleManager(private val project: Project) {
             if (dependenciesEndIndex == -1) return@runWriteCommandAction
 
             val dependencyLines = lines.subList(dependenciesStartIndex + 1, dependenciesEndIndex)
-                .filter { it.trim().startsWith("implementation project") }
+                .filter { it.trim().startsWith("$IMPLEMENTATION $PROJECT") }
 
-            val newDependency = "    implementation project(path: '$moduleName')"
+            val newDependency = "$TAB$IMPLEMENTATION $PROJECT(path: '$moduleName')"
             val insertIndex = dependencyLines.indexOfFirst { it > newDependency }
 
             if (dependencyLines.isEmpty()) {

@@ -19,4 +19,6 @@ const val HILT = "hilt"
 const val MODULE = "Module"
 const val PROVIDES = "Provides"
 const val VIEW_MODEL_COMPONENT = "ViewModelComponent"
+const val IMPLEMENTATION = "implementation"
+const val PROJECT = "project"
 

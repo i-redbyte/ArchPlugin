@@ -42,34 +42,34 @@ ${importList.sortedImports().joinToString("\n")}
 
 @$COMPOSABLE
 $INTERNAL $FUN ${params.camelCaseFeatureName}Screen(viewModel: ${params.camelCaseFeatureName}ViewModel = hiltViewModel()) { 
-    val state by viewModel.viewStateFlow.collectAsState()
-    val eventHandler = viewModel::sendEvent
-    ${params.camelCaseFeatureName}Content(state, eventHandler)
+val state by viewModel.viewStateFlow.collectAsState()
+val eventHandler = viewModel::sendEvent
+${params.camelCaseFeatureName}Content(state, eventHandler)
 }
             
 @$COMPOSABLE
 $INTERNAL $FUN ${params.camelCaseFeatureName}Content(
-    ${generateStateParam(params.contract.withState)}
-    ${generateActionsParam(params.contract.withActions)}
+$TAB${generateStateParam(params.contract.withState)}
+$TAB${generateActionsParam(params.contract.withActions)}
 ) { 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ){
-       TODO("Make your screen")
-    }
+${TAB}Column(
+${TAB}${TAB}modifier = Modifier
+${TAB}${TAB}${TAB}.fillMaxSize()
+${TAB}${TAB}${TAB}.padding(16.dp)
+${TAB}){
+${TAB}${TAB}TODO("Make your screen")
+${TAB}}
 }
 
 @ThemedPreview
 @$COMPOSABLE
 $INTERNAL $FUN Preview${params.camelCaseFeatureName}Content() {
-    OtpTheme {
-        ${params.camelCaseFeatureName}Content(
-            ${generatePreviewState(params.contract.withState)}
-            ${generatePreviewActions(params.contract.withActions)}
-        )
-    }
+${TAB}OtpTheme {
+$TAB$TAB${params.camelCaseFeatureName}Content(
+$TAB$TAB$TAB${generatePreviewState(params.contract.withState)}
+$TAB$TAB$TAB${generatePreviewActions(params.contract.withActions)}
+$TAB$TAB)
+$TAB}
 }
         """.trimIndent()
     }
