@@ -37,7 +37,7 @@ class MakeModule(feature: Feature) : Module() {
             addResValuesPackage()
         }.build()
 
-        SettingsGradleManager(directory.project)
-            .ensureModuleInSettings(directory, featureMetadata.featureName)
+        GradleManager(directory.project)
+            .ensureModuleInSettingsAndBuild(directory, featureMetadata.featureName)
     }
 }
