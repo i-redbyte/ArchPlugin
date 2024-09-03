@@ -15,13 +15,13 @@ class DITemplate : Template<DIParams> {
 
 
         return """
-$PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation
+$PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.di
 
 ${importList.sortedImports().joinToString("\n")}
 
 @$MODULE
 @InstallIn($VIEW_MODEL_COMPONENT::$CLASS)
-$INTERNAL $CLASS {
+$INTERNAL $CLASS ${params.camelCaseFeatureName}Module{
     //@$PROVIDES
     //$FUN yours(
     //)

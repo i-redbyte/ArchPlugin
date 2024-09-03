@@ -20,6 +20,7 @@ class DIPackageCreator(
                     DIParams.build {
                         packageName = featureMetadata.packageName
                         lowerCaseFeatureName = names.lowerCaseModuleName
+                        camelCaseName = names.camelCaseName
                     }
                 )
             )

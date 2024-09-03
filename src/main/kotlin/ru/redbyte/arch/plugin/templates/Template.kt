@@ -177,8 +177,9 @@ class ViewModelParams private constructor(
 
 class DIParams private constructor(
     packageName: String,
-    lowerCaseFeatureName: String
-) : BaseFeatureParams(packageName, lowerCaseFeatureName) {
+    lowerCaseFeatureName: String,
+    camelCaseName: String
+) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseName) {
     companion object {
         fun build(init: DIParamsBuilder.() -> Unit): DIParams {
             return DIParamsBuilder().apply(init).build()
@@ -188,7 +189,8 @@ class DIParams private constructor(
     class DIParamsBuilder {
         var packageName: String by Delegates.notNull()
         var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseName: String by Delegates.notNull()
 
-        fun build() = DIParams(packageName, lowerCaseFeatureName)
+        fun build() = DIParams(packageName, lowerCaseFeatureName, camelCaseName)
     }
 }
