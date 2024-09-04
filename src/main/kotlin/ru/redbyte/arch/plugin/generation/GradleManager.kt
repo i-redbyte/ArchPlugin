@@ -63,20 +63,41 @@ class GradleManager(private val project: Project) {
         WriteCommandAction.runWriteCommandAction(project) {
             val document = settingsFile.viewProvider.document ?: return@runWriteCommandAction
             val lines = document.text.split("\n").toMutableList()
-            val includeLines = lines.filter { it.startsWith("include") }
-            val insertIndex = includeLines.indexOfFirst { it > "include '$moduleName'" }
+            val featureModulesStartIndex = lines.indexOfFirst { it.contains("//фичемодули") }
 
-            if (includeLines.isEmpty()) {
-                document.insertString(document.textLength, "\ninclude '$moduleName'")
+            if (featureModulesStartIndex == -1) {
+                val includeLines = lines.filter { it.startsWith("include") }
+                val insertIndex = includeLines.indexOfFirst { it > "include '$moduleName'" }
+
+                if (includeLines.isEmpty()) {
+                    document.insertString(document.textLength, "\ninclude '$moduleName'")
+                } else if (insertIndex == -1) {
+                    val lastIncludeLine = lines.indexOf(includeLines.last())
+                    document.insertString(document.getLineEndOffset(lastIncludeLine), "\ninclude '$moduleName'")
+                } else {
+                    val includeInsertLine = lines.indexOf(includeLines[insertIndex])
+                    document.insertString(document.getLineStartOffset(includeInsertLine), "include '$moduleName'\n")
+                }
+                return@runWriteCommandAction
+            }
+
+            val featureModuleLines = lines.subList(featureModulesStartIndex + 1, lines.size)
+                .filter { it.startsWith("include ':feature:") }
+
+            val insertIndex = featureModuleLines.indexOfFirst { it > "include '$moduleName'" }
+
+            if (featureModuleLines.isEmpty()) {
+                document.insertString(document.getLineEndOffset(featureModulesStartIndex), "\ninclude '$moduleName'")
             } else if (insertIndex == -1) {
-                val lastIncludeLine = lines.indexOf(includeLines.last())
+                val lastIncludeLine = lines.indexOf(featureModuleLines.last())
                 document.insertString(document.getLineEndOffset(lastIncludeLine), "\ninclude '$moduleName'")
             } else {
-                val includeInsertLine = lines.indexOf(includeLines[insertIndex])
+                val includeInsertLine = lines.indexOf(featureModuleLines[insertIndex])
                 document.insertString(document.getLineStartOffset(includeInsertLine), "include '$moduleName'\n")
             }
         }
     }
+
 
     private fun insertDependencyInAlphabeticalOrder(buildFile: PsiFile, moduleName: String) {
         WriteCommandAction.runWriteCommandAction(project) {
