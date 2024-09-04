@@ -12,9 +12,20 @@ class ViewModelTemplate : Template<ViewModelParams> {
                 "$IMPORT dagger.hilt.android.lifecycle.HiltViewModel",
                 "$IMPORT com.noxx.navigator.navigator.Navigator",
                 "$IMPORT androidx.lifecycle.viewModelScope",
+                "$IMPORT $PROJECT_BASE_VIEW_MODEL",
             )
         )
-        val viewState = if (params.contract.withState) "${params.camelCaseFeatureName}State" else "ViewState"
+        val viewState = if (params.contract.withState) {
+            """            
+${params.camelCaseFeatureName}State {
+${TAB}${TAB}return ${params.camelCaseFeatureName}State(
+${TAB}${TAB}${TAB}name = ""
+${TAB}${TAB})
+${TAB}}
+            """.trimIndent()
+        } else {
+            "object : ViewState {}"
+        }
         val viewActions = if (params.contract.withActions) "${params.camelCaseFeatureName}Actions" else "ViewEvent"
         return """
 $PACKAGE ${params.packageName}.${params.lowerCaseFeatureName}.presentation        
@@ -27,13 +38,11 @@ ${TAB}private val navigator: Navigator
 ) : BaseViewModel<${makeViewModelContent(params)}>(),
 ${TAB}Navigator by navigator { 
 
-${TAB}override fun setInitialState(): $viewState(){
-${TAB}${TAB}return $viewState()
-${TAB}}
+${TAB}override fun setInitialState(): $viewState 
     
-${TAB}override suspend fun handleEvents(event$viewActions) {
+${TAB}override suspend fun handleEvents(event: $viewActions) {
 ${TAB}${TAB}when (event) {
-${TAB}${TAB}${TAB}TODO("Add your events")
+${TAB}${TAB}${TAB}else -> TODO("Add your events")
 ${TAB}${TAB}}
 ${TAB}}
     

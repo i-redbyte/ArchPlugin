@@ -23,9 +23,11 @@ ${importList.sortedImports().joinToString("\n")}
 @InstallIn($VIEW_MODEL_COMPONENT::$CLASS)
 $INTERNAL $CLASS ${params.camelCaseFeatureName}$MODULE {
 
-$TAB//@$PROVIDES
-$TAB//$FUN yours(
-$TAB//)
+$TAB@$PROVIDES
+$TAB$FUN provideYoursDependency(
+$TAB){
+$TAB${TAB}TODO("provide yours dependency for ${params.lowerCaseFeatureName}")
+$TAB}
     
 }
         """.trimIndent()

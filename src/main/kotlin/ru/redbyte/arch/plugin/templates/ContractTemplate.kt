@@ -20,7 +20,7 @@ ${makeStateClass(params)}${makeActionsClass(params)}${makeEffectClass(params)}
         if (!params.contract.withState) return ""
         return """
 $INTERNAL $DATA_CLASS ${params.camelCaseFeatureName}State(  
-
+${TAB}val name: String
 ) : ViewState
 
 

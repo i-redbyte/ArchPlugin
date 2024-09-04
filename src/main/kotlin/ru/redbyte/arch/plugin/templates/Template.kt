@@ -45,7 +45,8 @@ class BuildGradleParams private constructor(
 
     val plugins: List<String> = listOf(
         "libs.plugins.android.library",
-        "libs.plugins.kotlin.library",
+        "libs.plugins.kotlin.android",
+        "libs.plugins.kotlin.ksp",
         "libs.plugins.hilt",
         "libs.plugins.kotlin.compose",
     )
@@ -58,6 +59,8 @@ class BuildGradleParams private constructor(
     val dependenciesProjects: List<String> = listOf(
         "implementation project(path: ':_core:data')",
         "implementation project(path: ':_core:domain')",
+        "implementation project(path: ':_core:presentation')",
+        "implementation project(path: ':designSystem:actual')",
     )
     val dependenciesLibraries: List<String> = listOf(
         "implementation libs.hilt.android"

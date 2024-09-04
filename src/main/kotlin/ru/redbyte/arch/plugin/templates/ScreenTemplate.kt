@@ -15,7 +15,7 @@ class ScreenTemplate : Template<ScreenParams> {
         }
 
         fun generatePreviewState(withState: Boolean): String {
-            return if (withState) "state = ${params.camelCaseFeatureName}State()," else ""
+            return if (withState) "state = ${params.camelCaseFeatureName}State(\"\")," else ""
         }
 
         fun generatePreviewActions(withActions: Boolean): String {
@@ -30,6 +30,9 @@ class ScreenTemplate : Template<ScreenParams> {
             "$IMPORT $ANDROIDX_COMPOSE.ui.Modifier",
             "$IMPORT $ANDROIDX_COMPOSE.ui.tooling.preview.Preview",
             "$IMPORT $ANDROIDX_COMPOSE.ui.unit.dp",
+            "$IMPORT $ANDROIDX.$HILT.navigation.compose.hiltViewModel",
+            "$IMPORT $PROJECT_THEMED_PREVIEW",
+            "$IMPORT $PROJECT_THEME",
             "$IMPORT ${params.packageName}.${params.lowerCaseFeatureName}.R"
         )
 
