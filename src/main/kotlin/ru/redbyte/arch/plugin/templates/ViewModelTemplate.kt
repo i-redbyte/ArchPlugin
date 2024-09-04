@@ -24,7 +24,8 @@ ${importList.sortedImports().joinToString("\n")}
 @HiltViewModel
 $INTERNAL $CLASS ${params.camelCaseFeatureName}ViewModel @Inject constructor(
 ${TAB}private val navigator: Navigator
-) : BaseViewModel<${makeViewModelContent(params)}>() { 
+) : BaseViewModel<${makeViewModelContent(params)}>(),
+${TAB}Navigator by navigator { 
 
 ${TAB}override fun setInitialState(): $viewState(){
 ${TAB}${TAB}return $viewState()
