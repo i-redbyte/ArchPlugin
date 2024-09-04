@@ -6,9 +6,10 @@ import ru.redbyte.arch.plugin.domain.Feature
 import ru.redbyte.arch.plugin.generation.builder.ArtifactBuilder
 
 
-class MakeModule(feature: Feature) : Module() {
+class MakeFeatureModule(feature: Feature) : FeatureModule() {
     private val featureMetadata = feature.params.metadata
     private val withDIFiles = feature.params.withDIFiles
+    private val screenOnly = feature.params.screenOnly
     private val contractParam = feature.params.contractParam
 
     private val names = NamesBuilder().build(featureMetadata.featureName)
@@ -28,6 +29,23 @@ class MakeModule(feature: Feature) : Module() {
 
     override fun createModuleStructure(directory: PsiDirectory) {
         super.createModuleStructure(directory)
+        when (screenOnly) {
+            true -> buildScreen()
+            else -> buildFeature()
+        }
+
+        GradleManager(directory.project)
+            .ensureModuleInSettingsAndBuild(directory, featureMetadata.featureName)
+    }
+
+    private fun buildScreen() {
+        artifactBuilder.apply {
+            addPresentationPackage(contractParam)
+        }.build()
+    }
+
+
+    private fun buildFeature() {
         artifactBuilder.apply {
             addManifest()
             addBuildGradle()
@@ -36,8 +54,5 @@ class MakeModule(feature: Feature) : Module() {
             if (withDIFiles) addDIPackage()
             addResValuesPackage()
         }.build()
-
-        GradleManager(directory.project)
-            .ensureModuleInSettingsAndBuild(directory, featureMetadata.featureName)
     }
 }

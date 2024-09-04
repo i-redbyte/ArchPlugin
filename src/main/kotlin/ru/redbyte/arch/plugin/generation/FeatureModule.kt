@@ -4,7 +4,7 @@ import com.intellij.openapi.fileTypes.PlainTextLanguage
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFileFactory
 
-abstract class Module {
+abstract class FeatureModule {
 
     var javaDirectory: PsiDirectory? = null
     var rootDirectory: PsiDirectory? = null

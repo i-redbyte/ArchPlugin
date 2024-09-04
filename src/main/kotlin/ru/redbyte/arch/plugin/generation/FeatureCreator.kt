@@ -14,7 +14,7 @@ class FeatureCreator(val project: Project) {
     ) {
         ApplicationManager.getApplication().runWriteAction {
             with(targetDirectory) {
-                MakeModule(feature).createModuleStructure(this)
+                MakeFeatureModule(feature).createModuleStructure(this)
             }
         }
     }

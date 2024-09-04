@@ -73,6 +73,14 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         isSelected = true
     }
 
+    private val screenOnlyCheckBox = JCheckBox("Screen only").apply {
+        isSelected = false
+        addActionListener {
+            createDiCheckBox.isEnabled = !isSelected
+            createDiCheckBox.isSelected = false
+        }
+    }
+
     init {
         init()
         title = "Create New Feature"
@@ -130,6 +138,8 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.add(createDiCheckBox)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
+        dialogPanel.add(screenOnlyCheckBox)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
         return dialogPanel
     }
 
@@ -154,6 +164,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
                     withEffect = withEffectCheckBox.isSelected
                 ),
                 withDIFiles = createDiCheckBox.isSelected,
+                screenOnly = screenOnlyCheckBox.isSelected
             ),
         )
     }
