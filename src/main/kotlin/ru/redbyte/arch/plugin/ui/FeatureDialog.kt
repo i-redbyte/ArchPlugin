@@ -37,7 +37,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     private val presenter: FeaturePresenter = FeaturePresenterImpl(this, FeatureCreator(project))
 
-    private val notificationGroup = NotificationGroup("Arch plugin errors", NotificationDisplayType.BALLOON, true)
+    private val notificationGroup = NotificationGroupManager.getInstance().getNotificationGroup("Arch plugin errors")
 
     private val featureNameField = EditorTextField().apply {
         setOneLineMode(true)
@@ -75,7 +75,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
 
     init {
         init()
-        title = "Create new feature"
+        title = "Create New Feature"
         useCustomPackageCheckBox.addActionListener {
             customPackageNameField.isEnabled = useCustomPackageCheckBox.isSelected
             if (!useCustomPackageCheckBox.isSelected) {
@@ -167,7 +167,9 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
     }
 
     override fun closeWithError(message: String) {
-        notificationGroup.createNotification(message, NotificationType.ERROR).notify(project)
+        notificationGroup
+            .createNotification(message, NotificationType.ERROR)
+            .notify(project)
         close(CANCEL_EXIT_CODE)
     }
 
