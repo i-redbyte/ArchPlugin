@@ -2,7 +2,7 @@
     <id>ru.redbyte.arch</id>
     <name>MVI Feature Creator</name>
     <vendor>Red_byte</vendor>
-    <description>Plugin for creating a module of a new MVI/ELM feature in the application</description>
+    <description>Plugin for creating a module of a new MVI feature in the application</description>
     <depends>com.intellij.modules.androidstudio</depends>
     <depends>org.jetbrains.android</depends>
     <extensions defaultExtensionNs="com.intellij">
