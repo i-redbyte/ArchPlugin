@@ -4,6 +4,7 @@ import com.intellij.psi.PsiDirectory
 import ru.redbyte.arch.plugin.utils.NamesBuilder
 import ru.redbyte.arch.plugin.domain.Feature
 import ru.redbyte.arch.plugin.generation.builder.ArtifactBuilder
+import java.util.*
 
 
 class MakeModule(feature: Feature) : Module() {
@@ -18,7 +19,10 @@ class MakeModule(feature: Feature) : Module() {
 
     override fun PsiDirectory.createJavaDirectory(): PsiDirectory = createSubdirectory(names.lowerCaseModuleName)
 
-    override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory = createSubdirectory(names.moduleName)
+    override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory = createSubdirectory(
+        names.camelCaseName
+            .replaceFirstChar { it.lowercase(Locale.getDefault()) }
+    )
 
     override fun PsiDirectory.createPackageDirectories(): PsiDirectory = featureMetadata.packageName
         .split(".")

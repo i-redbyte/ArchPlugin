@@ -11,7 +11,6 @@ class ViewModelTemplate : Template<ViewModelParams> {
                 "$IMPORT javax.inject.Inject",
                 "$IMPORT dagger.hilt.android.lifecycle.HiltViewModel",
                 "$IMPORT com.noxx.navigator.navigator.Navigator",
-                "$IMPORT androidx.lifecycle.viewModelScope",
                 "$IMPORT $PROJECT_BASE_VIEW_MODEL",
             )
         )

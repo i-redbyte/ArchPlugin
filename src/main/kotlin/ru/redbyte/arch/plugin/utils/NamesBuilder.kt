@@ -1,5 +1,7 @@
 package ru.redbyte.arch.plugin.utils
 
+import java.util.*
+
 private val snakeRegex = "-[a-zA-Z]".toRegex()
 private val camelRegex = "(?<=[a-zA-Z])[A-Z]".toRegex()
 
@@ -7,23 +9,23 @@ fun String.snakeToCamelCase() =
     snakeRegex
         .replace(this) {
             it.value.replace("-", "")
-                .toUpperCase()
+                .uppercase(Locale.getDefault())
         }
-        .capitalize()
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
 fun String.camelToSnakeCase() =
     camelRegex
         .replace(this) {
             "_${it.value}"
         }.replace("-","_")
-        .toLowerCase()
+        .lowercase(Locale.getDefault())
 
 class NamesBuilder {
 
     fun build(featureName: String): Names {
         val camelCaseName: String = featureName.snakeToCamelCase()
 
-        val lowerCaseName = camelCaseName.toLowerCase()
+        val lowerCaseName = camelCaseName.lowercase(Locale.getDefault())
         val snakeCaseName = featureName.replace("-", "_")
 
         return Names(

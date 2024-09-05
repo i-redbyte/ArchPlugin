@@ -24,11 +24,11 @@ class ScreenTemplate : Template<ScreenParams> {
 
         val importList = mutableListOf(
             "$IMPORT $ANDROIDX_COMPOSE.runtime.$COMPOSABLE",
+            "$IMPORT $ANDROIDX_COMPOSE.runtime.collectAsState",
             "$IMPORT $ANDROIDX_COMPOSE.foundation.layout.Column",
             "$IMPORT $ANDROIDX_COMPOSE.foundation.layout.fillMaxSize",
             "$IMPORT $ANDROIDX_COMPOSE.foundation.layout.padding",
             "$IMPORT $ANDROIDX_COMPOSE.ui.Modifier",
-            "$IMPORT $ANDROIDX_COMPOSE.ui.tooling.preview.Preview",
             "$IMPORT $ANDROIDX_COMPOSE.ui.unit.dp",
             "$IMPORT $ANDROIDX.$HILT.navigation.compose.hiltViewModel",
             "$IMPORT $PROJECT_THEMED_PREVIEW",
