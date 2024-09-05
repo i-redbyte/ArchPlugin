@@ -47,7 +47,7 @@ class GradleManager(private val project: Project) {
             .removePrefix(basePath)
             .replace(File.separator, ":")
             .removePrefix(":")
-        return ":$relativePath:${featureName.lowercase()}"
+        return ":$relativePath:$featureName"
     }
 
     private fun isModuleIncluded(settingsFile: PsiFile, moduleName: String): Boolean {

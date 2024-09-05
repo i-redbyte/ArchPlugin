@@ -11,18 +11,18 @@ class MakeModule(feature: Feature) : Module() {
     private val featureMetadata = feature.params.metadata
     private val withDIFiles = feature.params.withDIFiles
     private val contractParam = feature.params.contractParam
-
     private val names = NamesBuilder().build(featureMetadata.featureName)
+    private val featureModuleName = names.camelCaseName
+        .replaceFirstChar { it.lowercase(Locale.getDefault()) }
     private val artifactBuilder: ArtifactBuilder by lazy(mode = LazyThreadSafetyMode.NONE) {
         ArtifactBuilder(featureMetadata, names, rootDirectory, mainDirectory, javaDirectory)
     }
 
     override fun PsiDirectory.createJavaDirectory(): PsiDirectory = createSubdirectory(names.lowerCaseModuleName)
 
-    override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory = createSubdirectory(
-        names.camelCaseName
-            .replaceFirstChar { it.lowercase(Locale.getDefault()) }
-    )
+    override fun PsiDirectory.createRootFeatureDirectory(): PsiDirectory {
+        return createSubdirectory(featureModuleName)
+    }
 
     override fun PsiDirectory.createPackageDirectories(): PsiDirectory = featureMetadata.packageName
         .split(".")
@@ -42,6 +42,6 @@ class MakeModule(feature: Feature) : Module() {
         }.build()
 
         GradleManager(directory.project)
-            .ensureModuleInSettingsAndBuild(directory, featureMetadata.featureName)
+            .ensureModuleInSettingsAndBuild(directory, featureModuleName)
     }
 }
