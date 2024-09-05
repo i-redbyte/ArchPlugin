@@ -31,7 +31,7 @@
 
 ![install_dialog](/misc/create_feature_file_menu.png)
 
-Или правой кнопкой мыши в окне  **project** New > Feature
+Или правой кнопкой мыши в окне  **project** "New > Feature"
 
 ![install_dialog](/misc/create_feature.png)
 
@@ -39,7 +39,7 @@
 
 ![install_dialog](/misc/dialog.png)
 
-- **Select Directory**: выберите директорию для размещения новой фичи (по умолчанию Feature).
+- **Select Directory**: выберите директорию для размещения новой фичи (по умолчанию feature).
 - **Feature Name**: укажите имя фичи прописными буквами, разделяя слова через **-**.
 - **Use custom package name**: установите пользовательский пакет, если это необходимо.
 - **With State**: добавляет управление состоянием.
@@ -60,3 +60,8 @@
     - **With Effect**: если требуется добавить побочные эффекты.
 5. Установите опцию **Create DI Components**, если хотите автоматически сгенерировать компоненты для внедрения
    зависимостей.
+
+### Пример состав нового модуля:
+
+![Create Feature Dialog](/misc/struct.png)
+
