@@ -44,6 +44,11 @@ class ArtifactBuilder(
         return this
     }
 
+    fun addUnitTestPackage(): ArtifactBuilder {
+        artifactCreators.add(UnitTestPackageCreator(rootDirectory, featureMetadata, names))
+        return this
+    }
+
     fun build() {
         artifactCreators.forEach { it.create() }
     }

@@ -3,7 +3,8 @@ package ru.redbyte.arch.plugin.generation.models
 data class FeatureParams(
     val metadata: FeatureMetadata,
     val contractParam: FeatureContract,
-    val withDIFiles: Boolean
+    val withDIFiles: Boolean,
+    val withUnitTest: Boolean
 )
 
 data class FeatureContract(

@@ -25,4 +25,5 @@ const val PROJECT = "project"
 const val PROJECT_THEMED_PREVIEW = "ru.otpbank.mobile.utils.ThemedPreview"
 const val PROJECT_THEME = "ru.otpbank.mobile.theme.OtpTheme"
 const val PROJECT_BASE_VIEW_MODEL = "ru.otpbank.mobile.presentation.base.compose.BaseViewModel"
+const val PROJECT_BASE_TEST = "ru.otpbank.mobile.BaseTest"
 

@@ -197,3 +197,23 @@ class DIParams private constructor(
         fun build() = DIParams(packageName, lowerCaseFeatureName, camelCaseName)
     }
 }
+
+class UnitTestParams private constructor(
+    packageName: String,
+    lowerCaseFeatureName: String,
+    camelCaseName: String
+) : BaseFeatureParams(packageName, lowerCaseFeatureName, camelCaseName) {
+    companion object {
+        fun build(init: UnitTestParamsBuilder.() -> Unit): UnitTestParams {
+            return UnitTestParamsBuilder().apply(init).build()
+        }
+    }
+
+    class UnitTestParamsBuilder {
+        var packageName: String by Delegates.notNull()
+        var lowerCaseFeatureName: String by Delegates.notNull()
+        var camelCaseName: String by Delegates.notNull()
+
+        fun build() = UnitTestParams(packageName, lowerCaseFeatureName, camelCaseName)
+    }
+}

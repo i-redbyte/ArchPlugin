@@ -6,10 +6,10 @@ import ru.redbyte.arch.plugin.domain.Feature
 import ru.redbyte.arch.plugin.generation.builder.ArtifactBuilder
 import java.util.*
 
-
 class MakeModule(feature: Feature) : Module() {
     private val featureMetadata = feature.params.metadata
     private val withDIFiles = feature.params.withDIFiles
+    private val withUnitTest = feature.params.withUnitTest
     private val contractParam = feature.params.contractParam
     private val names = NamesBuilder().build(featureMetadata.featureName)
     private val featureModuleName = names.camelCaseName
@@ -38,10 +38,12 @@ class MakeModule(feature: Feature) : Module() {
             addReadMe()
             addPresentationPackage(contractParam)
             if (withDIFiles) addDIPackage()
+            if (withUnitTest) addUnitTestPackage()
             addResValuesPackage()
         }.build()
 
         GradleManager(directory.project)
             .ensureModuleInSettingsAndBuild(directory, featureModuleName)
     }
+
 }

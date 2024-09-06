@@ -50,6 +50,10 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         isSelected = false
     }
 
+    private val createUnitTestCheckBox = JCheckBox("Create a basic unit test struct").apply {
+        isSelected = true
+    }
+
     private val useCustomPackageCheckBox = JCheckBox("Use custom package name").apply {
         isSelected = false
     }
@@ -115,7 +119,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         dialogPanel.add(customPackageNameField)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
-        val checkBoxPanel = JPanel().apply {
+        val contractCheckBoxPanel = JPanel().apply {
             layout = BoxLayout(this, X_AXIS)
             alignmentX = Component.LEFT_ALIGNMENT
             add(withStateCheckBox)
@@ -124,10 +128,12 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
             add(Box.createRigidArea(Dimension(10, 0)))
             add(withEffectCheckBox)
         }
-        dialogPanel.add(checkBoxPanel)
+        dialogPanel.add(contractCheckBoxPanel)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         dialogPanel.add(createDiCheckBox)
+        dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
+        dialogPanel.add(createUnitTestCheckBox)
         dialogPanel.add(Box.createRigidArea(Dimension(0, 10)))
 
         return dialogPanel
@@ -154,6 +160,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
                     withEffect = withEffectCheckBox.isSelected
                 ),
                 withDIFiles = createDiCheckBox.isSelected,
+                withUnitTest = createUnitTestCheckBox.isSelected,
             ),
         )
     }
