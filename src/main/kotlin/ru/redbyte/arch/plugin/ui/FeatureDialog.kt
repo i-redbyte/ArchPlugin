@@ -50,7 +50,7 @@ class FeatureDialog(private val project: Project) : DialogWrapper(true), Feature
         isSelected = false
     }
 
-    private val createUnitTestCheckBox = JCheckBox("Create a basic unit test struct").apply {
+    private val createUnitTestCheckBox = JCheckBox("Enable unit tests").apply {
         isSelected = true
     }
 
