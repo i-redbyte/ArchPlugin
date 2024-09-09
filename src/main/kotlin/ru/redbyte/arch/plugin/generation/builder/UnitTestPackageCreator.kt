@@ -24,6 +24,7 @@ class UnitTestPackageCreator(
             .createSubdirectory("test")
             .createSubdirectory("java")
             .createPackageDirectories()
+            .createSubdirectory(names.lowerCaseModuleName)
             .createSubdirectory("presentation")
             .addFile("${names.camelCaseName}Test.kt",
                 UnitTestTemplate().generate(
